@@ -1,10 +1,11 @@
 from django.contrib import admin
 from django.urls import path, include, re_path
-from .views import pdvWeb
+from . import views
 
 app_name = 'pdvWeb'
 
 urlpatterns = [
-        path('', pdvWeb, name='pdvWeb'),
-    
+    path('', views.pdvWeb, name='pdvWeb'),
+    path('produtos/', views.produtos, name='produtos'),
+    path('cadastro_produto/', views.cadastro_produto, name='cadastro_produto'),
 ]

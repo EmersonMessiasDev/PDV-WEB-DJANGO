@@ -1,0 +1,55 @@
+body {
+  background-color: #FBFBFB;
+}
+.form-control:focus {
+  border-color: #46139D;
+  box-shadow: none;
+}
+.border-primary {
+  border-color: #46139D!important;
+}
+.bg-primary {
+  background-color: #46139D!important;
+}
+.btn-primary {
+  background-color: #46139D;
+  border-color: #46139D;
+}
+.btn-primary:hover {
+  background-color: #1C073F;
+  border-color: #1C073F;
+}
+.table thead th {
+  background-color: #46139D;
+  color: #FBFBFB;
+  border-color: #46139D;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #FBFBFB;
+}
+.table-striped tbody tr:nth-of-type(even) {
+  background-color: #F2F2F2;
+}
+.jumbotron {
+  background-color: #46139D;
+  color: #FBFBFB;
+  padding: 80px;
+}
+.form-control {
+  border-color: #1C073F;
+}
+label {
+  color: #46139D;
+}
+.sidebar {
+  background-color: #1C073F;
+  color: #FBFBFB;
+  padding: 20px;
+  height: 100%;
+}
+.nav-link {
+  color: #FBFBFB;
+}
+.nav-link:hover {
+  color: #46139D;
+}

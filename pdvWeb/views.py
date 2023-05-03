@@ -1,5 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
 
-# Create your views here.
 def pdvWeb(request):
-    return render(request, 'pdvWeb/pdvWeb.html')
+  return render(request, 'pdvWeb/pdvWeb.html')
+
+def produtos(request):
+  return render(request, 'lista_produtos.html')
+
+def cadastro_produto(request):
+  return render(request, 'cadastro_produto.html')
