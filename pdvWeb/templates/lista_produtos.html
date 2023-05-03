@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Produtos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{% static 'pdv/css/style.css' %}">
+</head>
+<body>
+  <div class="container my-5">
+    <h1 class="text-center mb-4">Lista de Produtos</h1>
+    <div class="text-right mb-3">
+      <a href="{% url 'pdvWeb:cadastro_produto' %}" class="btn btn-primary">Cadastrar Produto</a>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Nome</th>
+            <th>Valor</th>
+            <th>Estoque</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>001</td>
+            <td>Produto A</td>
+            <td>R$ 10,00</td>
+            <td>100</td>
+          </tr>
+          <tr>
+            <td>002</td>
+            <td>Produto B</td>
+            <td>R$ 20,00</td>
+            <td>50</td>
+          </tr>
+          <tr>
+            <td>003</td>
+            <td>Produto C</td>
+            <td>R$ 30,00</td>
+            <td>20</td>
+          </tr>
+          <tr>
+            <td>004</td>
+            <td>Produto D</td>
+            <td>R$ 40,00</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td>005</td>
+            <td>Produto E</td>
+            <td>R$ 50,00</td>
+            <td>15</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSS/W+kWzoZxpq0M11YELZJ6twLvT6vVEwoAYTjxhM",
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/esm/popper.min.js"
+    integrity="sha384-E1/I0aw/2aZQXUbJ68dkGihf10USuCnGYKwFpEgWfY1HTHnMBYPzXXFX6XazX6T3",
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+</body>
+</html>    

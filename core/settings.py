@@ -21,6 +21,7 @@ ALLOWED_HOSTS = ['198.211.99.20', 'localhost', '127.0.0.1','https://defconecta.t
 
 INSTALLED_APPS = [
     'jazzmin',
+    'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
