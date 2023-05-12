@@ -8,3 +8,5 @@
 ➜  python manage.py test -v 2   
 # ou
 ➜  python manage.py test
+# ou
+➜  pytest -v
