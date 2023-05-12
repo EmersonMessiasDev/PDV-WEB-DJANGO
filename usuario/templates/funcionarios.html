@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Listagem de Funcionários</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'pdv/css/style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- <style>
+      body {
+        background-color: #FBFBFB;
+      }
+      h1 {
+        color: #46139D;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .container {
+        margin-top: 30px;
+        margin-bottom: 30px;
+      }
+      table {
+        background-color: #FBFBFB;
+        color: #1C073F;
+        font-size: 16px;
+      }
+      th {
+        background-color: #1C073F;
+        color: #FBFBFB;
+        font-weight: bold;
+      }
+      td {
+        padding: 10px;
+      }
+      .btn-cadastrar {
+        background-color: #46139D;
+        color: #FBFBFB;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 0;
+        border: none;
+        margin-top: 20px;
+        margin-bottom: 30px;
+      }
+      .btn-cadastrar:hover {
+        background-color: #1C073F;
+        color: #FBFBFB;
+        cursor: pointer;
+      }
+    </style> -->
+  </head>
+  <body>
+
+    <div class="container">
+      <h1 class="title">Lista de Funcionários</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Cargo</th>
+            <th>CPF</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Funcionário 1</td>
+            <td>Cargo 1</td>
+            <td>123.456.789-00</td>
+          </tr>
+          <tr>
+            <td>Funcionário 2</td>
+            <td>Cargo 2</td>
+            <td>987.654.321-00</td>
+          </tr>
+          <tr>
+            <td>Funcionário 3</td>
+            <td>Cargo 3</td>
+            <td>456.123.789-00</td>
+          </tr>
+        </tbody>
+      </table>
+      <a href="{% url 'usuario:cadastro' %}" class="btn btn-cadastrar">Cadastrar Usuário</a>
+      <a href="{% url 'usuario:gerencia' %}" class="btn btn-cadastrar">Voltar</a>
+    </div>
+
+  </body>
+</html>

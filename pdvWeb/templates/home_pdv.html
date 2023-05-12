@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>PDV Web</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'pdv/css/style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-2 sidebar">
+          <a href="#" class="logo">DefPDV</a>
+            <div class="side-itens">
+              <a href="{% url 'usuario:gerencia' %}" class="sidebar-item">Administração</a>
+              <a href="#" class="sidebar-item">Vendas</a>
+              <a href="{% url 'usuario:login' %}" class="sidebar-item">Login</a>
+            </div>
+        </div>
+        <div class="col main">
+          <h2>Itens Vendidos</h2>
+          <div class="product-list">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Quantidade</th>
+                  <th>Preço</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Produto 1</td>
+                  <td>1</td>
+                  <td>R$ 10,00</td>
+                </tr>
+                <tr>
+                  <td>Produto 2</td>
+                  <td>2</td>
+                  <td>R$ 20,00</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="total-price">
+            Total: R$ 50,00
+          </div>
+          <div class="action-buttons">
+            <button class="btn btn-success">Finalizar Venda</button>
+            <button class="btn btn-danger">Cancelar Venda</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
