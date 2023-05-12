@@ -10,10 +10,7 @@
 </head>
 <body>
   <div class="container my-5">
-    <h1 class="text-center mb-4">Lista de Produtos</h1>
-    <div class="text-right mb-3">
-      <a href="{% url 'pdvWeb:cadastro_produto' %}" class="btn btn-primary">Cadastrar Produto</a>
-    </div>
+    <h1 class="text-center mb-4 title">Lista de Produtos</h1>
     <div class="table-responsive">
       <table class="table table-striped table-hover">
         <thead>
@@ -57,6 +54,10 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="text-left mb-3">
+      <a href="{% url 'pdvWeb:cadastro_produto' %}" class="btn btn-cadastrar">Cadastrar Produto</a>
+      <a href="{% url 'usuario:gerencia' %}" class="btn btn-cadastrar">Voltar</a>
     </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
