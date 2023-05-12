@@ -10,3 +10,5 @@
 ➜  python manage.py test
 # ou
 ➜  pytest -v
+
+pip install pytest pytest-django 
