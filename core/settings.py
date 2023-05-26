@@ -332,3 +332,5 @@ JAZZMIN_UI_TWEAKS = {
         "success": "btn-success"
     }
 }
+
+APPEND_SLASH = False

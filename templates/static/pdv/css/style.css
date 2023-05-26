@@ -2,27 +2,27 @@ body {
   background-color: #FBFBFB;
 }
 .form-control:focus {
-  border-color: #46139D;
+  border-color: #133E7C;
   box-shadow: none;
 }
 .border-primary {
-  border-color: #46139D!important;
+  border-color: #133E7C!important;
 }
 .bg-primary {
-  background-color: #46139D!important;
+  background-color: #133E7C!important;
 }
 .btn-primary {
-  background-color: #46139D;
-  border-color: #46139D;
+  background-color: #133E7C;
+  border-color: #133E7C;
 }
 .btn-primary:hover {
-  background-color: #1C073F;
-  border-color: #1C073F;
+  background-color: #0F2956;
+  border-color: #0F2956;
 }
 .table thead th {
-  background-color: #46139D;
+  background-color: #133E7C;
   color: #FBFBFB;
-  border-color: #46139D;
+  border-color: #133E7C;
 }
 .table-striped tbody tr:nth-of-type(odd) {
   background-color: #FBFBFB;
@@ -31,25 +31,49 @@ body {
   background-color: #F2F2F2;
 }
 .jumbotron {
-  background-color: #46139D;
+  background-color: #133E7C;
   color: #FBFBFB;
   padding: 80px;
+  height:10vh;
+  border-radius: 0;
 }
 .form-control {
-  border-color: #1C073F;
+  border-color: #0F2956;
 }
 label {
-  color: #46139D;
+  color: #133E7C;
 }
 .sidebar {
-  background-color: #1C073F;
+  background-color: #0F2956;
   color: #FBFBFB;
   padding: 20px;
-  height: 100%;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.logo{
+  color: #FBFBFB;
+}
+.logo:hover{
+  color: #FBFBFB;
+  text-decoration: none;
 }
 .nav-link {
   color: #FBFBFB;
+  border-bottom: 0.5px solid #FBFBFB;
 }
 .nav-link:hover {
-  color: #46139D;
+  background-color: #133E7C;
+  color: #FBFBFB;
+}
+
+.btn-cadastrar{
+  background-color: #0F2956;
+  color: #FBFBFB;
+}
+.btn-cadastrar:hover{
+  background-color: #133E7C;
+  color: #FBFBFB;
 }

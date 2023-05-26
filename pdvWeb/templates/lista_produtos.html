@@ -19,39 +19,22 @@
             <th>Nome</th>
             <th>Valor</th>
             <th>Estoque</th>
+            <th colspan="2">Operações</th>
           </tr>
         </thead>
         <tbody>
+          {% for produto in produtos %}
+
           <tr>
-            <td>001</td>
-            <td>Produto A</td>
-            <td>R$ 10,00</td>
-            <td>100</td>
+            <td>{{produto.codigo}}</td>
+            <td>{{produto.nome}}</td>
+            <td>R${{produto.valor}}</td>
+            <td>{{produto.estoque}}</td>
+            <td><a href="{% url 'pdvWeb:atualizacao_produto' produto.id %}">Atualizar</a></td>
+            <td><a href="{% url 'pdvWeb:deletar_produto' produto.id %}">Deletar</a></td>
           </tr>
-          <tr>
-            <td>002</td>
-            <td>Produto B</td>
-            <td>R$ 20,00</td>
-            <td>50</td>
-          </tr>
-          <tr>
-            <td>003</td>
-            <td>Produto C</td>
-            <td>R$ 30,00</td>
-            <td>20</td>
-          </tr>
-          <tr>
-            <td>004</td>
-            <td>Produto D</td>
-            <td>R$ 40,00</td>
-            <td>5</td>
-          </tr>
-          <tr>
-            <td>005</td>
-            <td>Produto E</td>
-            <td>R$ 50,00</td>
-            <td>15</td>
-          </tr>
+
+          {% endfor %}
         </tbody>
       </table>
     </div>
