@@ -11,9 +11,16 @@ class Produto(models.Model):
     return self.nome
   
 class Venda(models.Model):
-  produto = models.ForeignKey(Produto, on_delete=models.DO_NOTHING, null=False, blank=False)
-  qtd = models.IntegerField(null=False, blank=False)
-  total = models.FloatField(null=False, blank=False)
+    produtos = models.ManyToManyField(Produto, through='ItemVenda')
+    total = models.FloatField(null=False, blank=False)
+    
+
+class ItemVenda(models.Model):
+    venda = models.ForeignKey(Venda, on_delete=models.CASCADE)
+    produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
+    quantidade = models.IntegerField(null=False, blank=False)
+    subtotal = models.FloatField(null=False, blank=False)
+  
   
 class NotaFiscal(models.Model):
   funcionario = models.ForeignKey(Funcionario, on_delete=models.DO_NOTHING, null=False, blank=False)

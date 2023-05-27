@@ -6,6 +6,7 @@ class Funcao(models.Model):
   def __str__(self) -> str:
     return self.nome
 
+
 class Funcionario(models.Model):
   cpf = models.CharField(max_length=11, null=False, blank=False)
   nome = models.CharField(max_length=50, null=False, blank=False)
