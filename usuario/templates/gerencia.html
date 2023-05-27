@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
   <title>Gerenciamento</title>
   <meta charset="utf-8">
@@ -14,7 +14,7 @@
 <body>
 <div class="row">
   <div class="col-2 sidebar">
-    <h3>Opções</h3>
+    <h3><a href="{% url 'pdvWeb:home' %}" class="logo">DefPdv</a></h3>
     <ul class="nav flex-column side-itens">
       <li class="nav-item">
         <a class="nav-link sidebar-item" href="{% url 'usuario:funcionarios' %}">Funcionários</a>
@@ -26,12 +26,11 @@
         <a class="nav-link sidebar-item" href="#">Vendas</a>
       </li>
     </ul>
+    <a href="#" class="nav-link">Logout</a>
   </div>
 
-  <div class="col info-gerencia">
-    <div class="jumbotron text-center">
-      <h1>Bem-vindo à Administração</h1>
-    </div>
+  <div class="col-10 jumbotron text-center">
+    <h1>Bem-vindo à Administração</h1>
   </div>
 </div>
 

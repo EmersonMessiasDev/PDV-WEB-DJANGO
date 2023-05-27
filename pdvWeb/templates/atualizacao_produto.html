@@ -3,7 +3,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Cadastro de Produtos</title>
+  <title>Atualização de Produtos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="{% static 'pdv/css/style.css' %}">
@@ -16,27 +16,27 @@
     <div class="row justify-content-center">
       <div class="col-lg-6">
         <div class="card border-primary">
-          <div id="header" class="card-header bg-primary text-white">Cadastro de Produtos</div>
+          <div id="header" class="card-header bg-primary text-white">Atualização de Produtos</div>
           <div class="card-body">
-            <form action="{% url 'pdvWeb:cadastrar_produto' %}" method="POST">
+            <form action="{% url 'pdvWeb:atualizar_produto' produto.id %}" method="POST">
               {% csrf_token %}
               <div class="form-group">
                 <label for="codigo">Código</label>
-                <input type="text" class="form-control" id="codigo" name="codigo" required>
+                <input type="text" class="form-control" id="codigo" name="codigo" value='{{produto.codigo}}'>
               </div>
               <div class="form-group">
-                <label for="descricao">Descrição</label>
-                <input type="text" class="form-control" id="descricao" name="descricao" required>
+                <label for="nome">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" value='{{produto.nome}}'>
               </div>
               <div class="form-group">
-                <label for="valor">Valor (Unidade)</label>
-                <input type="number" class="form-control" id="valor" name="valor" required>
+                <label for="valor">Valor</label>
+                <input type="number" class="form-control" id="valor" name="valor" value='{{produto.valor}}'>
               </div>
               <div class="form-group">
-                <label for="quantidade">Quantidade</label>
-                <input type="number" class="form-control" id="quantidade" name="quantidade" required>
+                <label for="estoque">Estoque</label>
+                <input type="text" class="form-control" id="estoque" name="estoque" value='{{produto.estoque}}'>
               </div>
-              <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
+              <button type="submit" class="btn btn-primary btn-block">Atualizar</button>
             </form>
           </div>
         </div>

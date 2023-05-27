@@ -16,12 +16,13 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-2 sidebar">
-          <a href="#" class="logo">DefPDV</a>
+          <h3><a href="{% url 'pdvWeb:home' %}" class="logo">DefPdv</a></h3>
             <div class="side-itens">
-              <a href="{% url 'usuario:gerencia' %}" class="sidebar-item">Administração</a>
-              <a href="#" class="sidebar-item">Vendas</a>
-              <a href="{% url 'usuario:login' %}" class="sidebar-item">Login</a>
+              <a href="{% url 'usuario:gerencia' %}" class="nav-link">Administração</a>
+              <a href="#" class="nav-link">Vendas</a>
+              <a href="{% url 'usuario:login' %}" class="nav-link">Login</a>
             </div>
+          <a href="#" class="nav-link">Logout</a>
         </div>
         <div class="col main">
           <h2>Itens Vendidos</h2>
