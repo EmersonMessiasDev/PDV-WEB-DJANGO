@@ -3,12 +3,12 @@ from usuario.models import Funcionario
 
 class Produto(models.Model):
   codigo = models.IntegerField(null=False, blank=False)
-  nome = models.CharField(max_length=50, null=False, blank=False)
+  descricao = models.CharField(max_length=50, null=False, blank=False)
   valor = models.FloatField(null=False, blank=False)
-  estoque = models.IntegerField(null=False, blank=False)
+  quantidade = models.IntegerField(null=False, blank=False)
   
   def __str__(self) -> str:
-    return self.nome
+    return self.descricao
   
 class Venda(models.Model):
     produtos = models.ManyToManyField(Produto, through='ItemVenda')

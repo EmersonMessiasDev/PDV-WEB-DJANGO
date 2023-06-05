@@ -11,29 +11,36 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
-<body>
+  <body>
 
-<div class="jumbotron text-center">
-  <h1>Cadastro de Funcionário</h1>
-</div>
-  
-<div class="container">
-  <form>
-    <div class="form-group">
-      <label for="nome">Nome:</label>
-      <input type="text" class="form-control" id="nome" placeholder="Digite o nome do funcionário" required>
-    </div>
-    <div class="form-group">
-      <label for="cpf">CPF:</label>
-      <input type="text" class="form-control" id="cpf" placeholder="Digite o CPF do funcionário" required>
-    </div>
-    <div class="form-group">
-      <label for="funcao">Função:</label>
-      <input type="text" class="form-control" id="funcao" placeholder="Digite a função do funcionário" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Cadastrar</button>
-  </form>
-</div>
+  <div class="jumbotron text-center">
+    <h1>Cadastro de Funcionário</h1>
+  </div>
+    
+  <div class="container">
+    <form action="{% url 'usuario:cadastrar_funcionario' %}" method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="nome">Nome:</label>
+        <input type="text" class="form-control" name="nome" id="nome" placeholder="Digite o nome do funcionário" required>
+      </div>
+      <div class="form-group">
+        <label for="cpf">CPF:</label>
+        <input type="text" class="form-control" name=cpf id="cpf" placeholder="Digite o CPF do funcionário" maxlength="11" required>
+      </div>
+      <div class="form-group">
+        <label for="cargo">Cargo:</label>
+        <select class="form-control" name="cargo" id="cargo" required>
+          {% for cargo in cargos %}
+            <option value="{{ cargo.id }}">{{ cargo.nome }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Cadastrar</button>
+      <a href="{% url 'usuario:funcionarios' %}" class="btn btn-primary">Voltar</a>
 
-</body>
+    </form>
+  </div>
+
+  </body>
 </html>

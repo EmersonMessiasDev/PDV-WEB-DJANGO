@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Atualização de Produtos</title>
+  <title>Cadastro de Funcionário</title>
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="{% static 'pdv/css/style.css' %}">
@@ -11,42 +11,37 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
-<body>
-  <div class="container my-5">
-    <div class="row justify-content-center">
-      <div class="col-lg-6">
-        <div class="card border-primary">
-          <div id="header" class="card-header bg-primary text-white">Atualização de Produtos</div>
-          <div class="card-body">
-            <form action="{% url 'pdvWeb:atualizar_produto' produto.id %}" method="POST">
-              {% csrf_token %}
-              <div class="form-group">
-                <label for="codigo">Código</label>
-                <input type="text" class="form-control" id="codigo" name="codigo" value='{{produto.codigo}}'>
-              </div>
-              <div class="form-group">
-                <label for="nome">Nome</label>
-                <input type="text" class="form-control" id="nome" name="nome" value='{{produto.nome}}'>
-              </div>
-              <div class="form-group">
-                <label for="valor">Valor</label>
-                <input type="number" class="form-control" id="valor" name="valor" value='{{produto.valor}}'>
-              </div>
-              <div class="form-group">
-                <label for="estoque">Estoque</label>
-                <input type="text" class="form-control" id="estoque" name="estoque" value='{{produto.estoque}}'>
-              </div>
-              <button type="submit" class="btn btn-primary btn-block">Atualizar</button>
-            </form>
-          </div>
-        </div>
-      </div>
+  <body>
+
+    <div class="jumbotron text-center">
+      <h1>Atualização de produto</h1>
     </div>
-  </div>
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@2.9.3/dist/umd/popper.min.js"
-    integrity="sha384-0th1akZfBnZWh6CBdOvN/Pa6uJ7VUoW6F8MdVYzpbPNPDCZsTm2s1sMnB9FHyfwh"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.
+      
+    <div class="container">
+      <form action="{% url 'pdvWeb:atualizar_produto' produto.id %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="codigo">Código:</label>
+          <input type="number" class="form-control" name="codigo" id="codigo" value="{{produto.codigo}}" placeholder="Digite o código do produto" required>
+        </div>
+        <div class="form-group">
+          <label for="descricao">Descrição:</label>
+          <input type="text" class="form-control" name=descricao id="descricao" value="{{produto.descricao}}" placeholder="Digite o nome do produto" required>
+        </div>
+        <div class="form-group">
+          <label for="valor">Valor (Unidade):</label>
+          <input type="number" class="form-control" name=valor id="valor" value="{{produto.valor}}" step=".01" placeholder="Digite o valor do produto" required>
+        </div>
+        <div class="form-group">
+          <label for="quantidade">Quantidade:</label>
+          <input type="number" class="form-control" name=quantidade id="quantidade" value="{{produto.quantidade}}" placeholder="Digite a quantidade do produto" step=".01" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Atualizar</button>
+        <a href="{% url 'pdvWeb:produtos' %}" class="btn btn-primary">Voltar</a>
+
+      </form>
+    </div>
+
+  </body>
+</html>
