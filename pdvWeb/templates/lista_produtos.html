@@ -16,10 +16,10 @@
         <thead>
           <tr>
             <th>Código</th>
-            <th>Nome</th>
+            <th>Descrição</th>
             <th>Valor</th>
-            <th>Estoque</th>
-            <th colspan="2">Operações</th>
+            <th>Quantidade</th>
+            <th colspan="2">Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -27,9 +27,9 @@
 
           <tr>
             <td>{{produto.codigo}}</td>
-            <td>{{produto.nome}}</td>
+            <td>{{produto.descricao}}</td>
             <td>R${{produto.valor}}</td>
-            <td>{{produto.estoque}}</td>
+            <td>{{produto.quantidade}}</td>
             <td><a href="{% url 'pdvWeb:atualizacao_produto' produto.id %}">Atualizar</a></td>
             <td><a href="{% url 'pdvWeb:deletar_produto' produto.id %}">Deletar</a></td>
           </tr>

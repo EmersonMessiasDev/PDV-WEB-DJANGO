@@ -19,30 +19,45 @@ def atualizacao_produto(request, id):
   return render(request, 'atualizacao_produto.html', {'produto': produto})
 
 def cadastrar_produto(request):
-  v_codigo = request.POST.get('codigo')
+  v_codigo = int(request.POST.get('codigo'))
   v_descricao = request.POST.get('descricao')
-  v_valor = request.POST.get('valor')
-  v_quantidade = request.POST.get('quantidade')
+  v_valor = float(request.POST.get('valor'))
+  v_quantidade = int(request.POST.get('quantidade'))
   
-  Produto.objects.create(codigo = v_codigo, nome = v_descricao, valor = v_valor, estoque = v_quantidade)
+  Produto.objects.create(codigo = v_codigo, descricao = v_descricao, valor = v_valor, quantidade = v_quantidade)
   
   return redirect('pdvWeb:produtos')
 
 def atualizar_produto(request, id):
-  v_codigo = request.POST.get('codigo')
+  v_codigo = int(request.POST.get('codigo'))
   v_descricao = request.POST.get('descricao')
-  v_valor = request.POST.get('valor')
-  v_quantidade = request.POST.get('quantidade')
+  v_valor = float(request.POST.get('valor'))
+  v_quantidade = int(request.POST.get('quantidade'))
   
   produto = Produto.objects.get(id = id)
   
-  produto.codigo = v_codigo
-  produto.nome = v_descricao
-  produto.valor = v_valor
-  produto.estoque = v_quantidade
-  produto.save()
-  
-  return redirect('pdvWeb:produtos')
+  if v_codigo > 0:
+    produto.codigo = v_codigo
+    if v_descricao != '':
+      produto.descricao = v_descricao
+      if v_valor > 0 and v_valor != '':
+        produto.valor = v_valor
+        if v_quantidade != '':
+          produto.quantidade = v_quantidade
+          produto.save()
+          return redirect('pdvWeb:produtos')
+        else:
+          id_produto = produto.id
+          return redirect('pdvWeb:atualizacao_produto', id_produto)
+      else:
+        id_produto = produto.id
+        return redirect('pdvWeb:atualizacao_produto', id_produto)
+    else:
+      id_produto = produto.id
+      return redirect('pdvWeb:atualizacao_produto', id_produto)
+  else:
+    id_produto = produto.id
+    return redirect('pdvWeb:atualizacao_produto', id_produto)
 
 def deletar_produto(request, id):
   produto = Produto.objects.get(id = id)

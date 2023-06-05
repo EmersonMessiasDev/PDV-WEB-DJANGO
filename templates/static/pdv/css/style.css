@@ -31,11 +31,16 @@ body {
   background-color: #F2F2F2;
 }
 .jumbotron {
-  background-color: #133E7C;
+  background-image: url(../../img/banner.jpg);
   color: #FBFBFB;
   padding: 80px;
   height:10vh;
   border-radius: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 .form-control {
   border-color: #0F2956;
