@@ -18,14 +18,15 @@
 </div>
   
 <div class="container">
-  <form>
+  <form method="POST" action="{% url 'usuario:validar_login' %}">
+    {% csrf_token %}
     <div class="form-group">
       <label for="nome">Nome:</label>
-      <input type="text" class="form-control" id="nome" placeholder="Digite o seu nome de usuário" required>
+      <input type="text" class="form-control" name="nome" id="nome" placeholder="Digite o seu nome de usuário" required>
     </div>
     <div class="form-group">
       <label for="senha">Senha:</label>
-      <input type="password" class="form-control" id="senha" placeholder="Digite a sua senha" required>
+      <input type="password" class="form-control" id="senha" name="cpf" placeholder="Digite a sua senha" required>
     </div>
     <button type="submit" class="btn btn-primary">Entrar</button>
   </form>

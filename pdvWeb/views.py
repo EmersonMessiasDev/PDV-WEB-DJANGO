@@ -1,22 +1,32 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Produto
+from usuario.models import *
 
 def home(request):
-  return render(request, 'home_pdv.html')
+  usuario = request.session.get('usuario')
+  request_usuario = Funcionario.objects.get(id = usuario ) 
+  
+  return render(request, 'home_pdv.html', {'usuario':request_usuario})
 
 def produtos(request):
   produtos = Produto.objects.all()
   
   return render(request, 'lista_produtos.html', {'produtos': produtos})
 
+
+
 def cadastro_produto(request):
   return render(request, 'cadastro_produto.html')
+
+
 
 def atualizacao_produto(request, id):
   produto = Produto.objects.get(id = id)
   
   return render(request, 'atualizacao_produto.html', {'produto': produto})
+
+
 
 def cadastrar_produto(request):
   v_codigo = int(request.POST.get('codigo'))
@@ -28,10 +38,15 @@ def cadastrar_produto(request):
   
   return redirect('pdvWeb:produtos')
 
+
+
 def atualizar_produto(request, id):
   v_codigo = int(request.POST.get('codigo'))
   v_descricao = request.POST.get('descricao')
-  v_valor = float(request.POST.get('valor'))
+  v_valor = request.POST.get('valor')
+  v_valor =  v_valor.replace('R$', '')
+  v_valor = v_valor.replace(',', '.')
+  v_valor = float(v_valor)
   v_quantidade = int(request.POST.get('quantidade'))
   
   produto = Produto.objects.get(id = id)
@@ -58,6 +73,8 @@ def atualizar_produto(request, id):
   else:
     id_produto = produto.id
     return redirect('pdvWeb:atualizacao_produto', id_produto)
+
+
 
 def deletar_produto(request, id):
   produto = Produto.objects.get(id = id)

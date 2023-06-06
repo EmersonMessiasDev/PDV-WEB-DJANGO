@@ -17,11 +17,21 @@
       <div class="row">
         <div class="col-2 sidebar">
           <h3><a href="{% url 'pdvWeb:home' %}" class="logo">DefPdv</a></h3>
-            <div class="side-itens">
-              <a href="{% url 'usuario:gerencia' %}" class="nav-link">Administração</a>
+            {% if usuario %}
+              <div class="usuario-info">
+                <p>Funcionário: {{usuario.nome}}</p>
+                <p>CPF: {{usuario.cpf}}</p>
+                <p>Cargo: {{usuario.cargo.nome}}</p>
+              </div>
+                <div class="action-usuario">
+                  {% if usuario.cargo.nome == 'Gerente'  %}
+                    <a href="{% url 'usuario:gerencia' %}" class="nav-link">Administração</a>
+                  {% endif %}
+                  <a href="{% url 'usuario:sair' %}" class="nav-link">Logout</a>
+                </div>
+            {% else %}
               <a href="{% url 'usuario:login' %}" class="nav-link">Login</a>
-            </div>
-          <a href="#" class="nav-link">Logout</a>
+            {% endif %}
         </div>
         <div class="col main">
           <h2>Itens Vendidos</h2>
