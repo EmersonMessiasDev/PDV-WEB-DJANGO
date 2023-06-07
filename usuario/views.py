@@ -26,6 +26,9 @@ def validar_login(request):
     nome = request.POST.get('nome')
     cpf = request.POST.get('cpf')
     
+    print(nome)
+    print(cpf)
+    
     
     try:
         funcionario = Funcionario.objects.get(nome=nome, cpf=cpf)

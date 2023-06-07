@@ -1,13 +1,52 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Produto
+from .models import *
 from usuario.models import *
 
 def home(request):
-  usuario = request.session.get('usuario')
-  request_usuario = Funcionario.objects.get(id = usuario ) 
-  
-  return render(request, 'home_pdv.html', {'usuario':request_usuario})
+    try:
+      usuario = request.session.get('usuario')
+      request_usuario = Funcionario.objects.get(id = usuario ) 
+      return render(request, 'home_pdv.html', {'usuario':request_usuario})
+    except:
+      return render(request, 'login.html')
+
+
+
+def nova_venda(request):
+    venda = Venda.objects.create(total=0)  # Cria uma nova venda com total 0
+    return redirect('pdvWeb:adicionar_produto', venda_id=venda.id)  # Redireciona para a view 'adicionar_produto' com o id da venda
+
+
+def adicionar_produto(request, venda_id):
+    usuario = request.session.get('usuario')
+    request_usuario = Funcionario.objects.get(id = usuario ) 
+    
+    if request.method == 'POST':
+        codigo_produto = request.POST['codigo_produto']
+        quantidade = int(request.POST['quantidade'])
+        produto = Produto.objects.get(codigo=codigo_produto)
+        
+                
+        item_venda = ItemVenda.objects.create(
+            venda_id=venda_id,
+            produto=produto,
+            quantidade=quantidade,
+            subtotal=produto.valor * quantidade
+        )
+        
+        venda = Venda.objects.get(id=venda_id)
+        venda.total += item_venda.subtotal
+        venda.save()
+
+
+    venda = Venda.objects.get(id=venda_id)
+    itens_venda = ItemVenda.objects.filter(venda_id=venda_id)
+    
+    return render(request, 'venda_pdv.html', {'venda': venda, 'itens_venda': itens_venda, 'usuario':request_usuario})
+
+
+
 
 def produtos(request):
   produtos = Produto.objects.all()

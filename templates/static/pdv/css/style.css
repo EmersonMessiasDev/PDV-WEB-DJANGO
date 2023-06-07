@@ -64,7 +64,9 @@ label {
 .logo:hover{
   color: #FBFBFB;
   text-decoration: none;
+  
 }
+
 .nav-link {
   color: #FBFBFB;
   border-bottom: 0.5px solid #FBFBFB;

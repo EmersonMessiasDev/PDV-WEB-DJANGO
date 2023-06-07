@@ -34,13 +34,60 @@
          {% endif %}
       </div>
       <div class="col main">
-        <div class="add-product text-center">
-          <img src="{% static 'pdv/img/CaixaLivre.png' %}" alt="Some description" style="max-width: 100%;"><br>
-          <a href="{% url 'pdvWeb:nova_venda' %}"  class="btn btn-primary mt-4" >Iniciar Venda</a>
-        </div>
+         <div class="add-product">
+            <h2>Nova venda</h2>
+            <hr>
+            <h4>Adicionar Produto</h4>
+            <form method="POST" action="{% url 'pdvWeb:adicionar_produto' venda.id %}">
+               {% csrf_token %}
+               <div class="form-row">
+                  <div class="col">
+                     <label for="productInput">Produto</label>
+                     <input name='codigo_produto' type="text" class="form-control" id="productInput" placeholder="Código do Produto">
+                  </div>
+                  <div class="col">
+                     <label for="quantityInput">Quantidade</label>
+                     <input name='quantidade' type="number" class="form-control" id="quantityInput" placeholder="Quantidade">
+                  </div>
+                  <div class="col">
+                     <br>
+                     <button type="submit" class="btn btn-primary mt-2 mb-2">Adicionar</button>
+                  </div>
+               </div>
+            </form>
+            <br>
+         </div>
+         <div class="product-list">
+            <table class="table">
+               <thead>
+                  <tr>
+                     <th>Produto</th>
+                     <th>Quantidade</th>
+                     <th>Vlr. Unit.</th>
+                     <th>Total</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {% for itens_venda in itens_venda %}
+                  <tr>
+                     <td>{{itens_venda.produto}}</td>
+                     <td>{{itens_venda.quantidade}}</td>
+                     <td>{{itens_venda.produto.valor}}</td>
+                     <td>R$ {{itens_venda.subtotal}}</td>
+                  </tr>
+                  {% endfor %}
+               </tbody>
+            </table>
+         </div>
+         <div class="total-price">
+            <label for="totalInput">Valor Total</label>
+            <input type="text" class="form-control" id="totalInput" placeholder="R$ {{venda.total}}" disabled>
+         </div>
+         <div class="action-buttons mt-2">
+            <button class="btn btn-success" data-toggle="modal" data-target="#paymentModal">Finalizar Venda</button>
+            <button class="btn btn-danger">Cancelar Venda</button>
+         </div>
       </div>
-      
-      
       <!-- Modal -->
       <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
@@ -112,7 +159,7 @@
                      </div>
                      <div class="form-group">
                         <label for="valorProduto">Valor do Produto</label>
-                        <input type="number" class="form-control" id="valorProduto" value="50.00" disabled>
+                        <input type="text" class="form-control" id="valorProduto" value="{{venda.total}}" disabled>
                      </div>
                      <div class="form-group">
                         <label for="valorTroco">Valor do Troco</label>
@@ -130,20 +177,21 @@
    </body>
    <script>
       $(document).ready(function(){
-          $('#valorRecebido').on('input', function() {
-              var valorRecebido = parseFloat($(this).val());
-              var valorProduto = parseFloat($('#valorProduto').val());
-      
-              if (isNaN(valorRecebido)) {
-                  $('#valorTroco').val('');
-              } else if (valorRecebido < valorProduto) {
-                  $('#valorTroco').val('Valor recebido é menor que o valor do produto.');
-              } else {
-                  var troco = valorRecebido - valorProduto;
-                  $('#valorTroco').val(troco.toFixed(2));
-              }
-          });
-      });
+         $('#valorRecebido').on('input', function() {
+             var valorRecebido = parseFloat($(this).val().replace(',', '.'));
+             var valorProduto = parseFloat($('#valorProduto').val().replace(',', '.'));
+     
+             if (isNaN(valorRecebido)) {
+                 $('#valorTroco').val('');
+             } else if (valorRecebido < valorProduto) {
+                 $('#valorTroco').val('Valor recebido é menor que o valor do produto.');
+             } else {
+                 var troco = valorRecebido - valorProduto;
+                 $('#valorTroco').val(troco.toFixed(2));
+             }
+         });
+     });
+     
    </script>
    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </html>
