@@ -45,9 +45,12 @@ body {
 .form-control {
   border-color: #0F2956;
 }
+
 label {
   color: #133E7C;
 }
+
+
 .sidebar {
   background-color: #0F2956;
   color: #FBFBFB;
@@ -58,29 +61,65 @@ label {
   flex-direction: column;
   justify-content: space-between;
 }
+
+
 .logo{
   color: #FBFBFB;
 }
+
+
 .logo:hover{
   color: #FBFBFB;
   text-decoration: none;
   
 }
 
+
 .nav-link {
   color: #FBFBFB;
   border-bottom: 0.5px solid #FBFBFB;
 }
+
+
 .nav-link:hover {
   background-color: #133E7C;
   color: #FBFBFB;
 }
 
+
 .btn-cadastrar{
   background-color: #0F2956;
   color: #FBFBFB;
 }
+
+
 .btn-cadastrar:hover{
   background-color: #133E7C;
   color: #FBFBFB;
 }
+
+
+/* ESTILIZAÇÃO ONLINE */
+.status-dot {
+  height: 15px;
+  width: 15px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  display: inline-block;
+  animation: blinker 1.5s linear infinite;
+}
+
+@keyframes blinker {
+50% { opacity: 0; }
+}
+
+
+thead th {
+  position: sticky;
+  top: 0;
+  background: white; /* para garantir que o texto da tabela abaixo não apareça por cima */
+  z-index: 10; /* opicional: para garantir que o cabeçalho apareça na frente de todos os outros elementos */
+}
+
+
+/* NOTA FISCAL */

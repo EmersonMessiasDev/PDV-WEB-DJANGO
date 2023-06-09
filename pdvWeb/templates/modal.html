@@ -1,0 +1,232 @@
+<!-- Modal CONSULTAR PRODUTOS-->
+<div class="modal fade" id="consultarProduto" tabindex="-1" role="dialog" aria-labelledby="finalizarVendaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="finalizarVendaModalLabel">Consultar produtos</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Buscar produto" id="searchProductInput">
+                <div class="input-group-append">
+                   <button class="btn btn-success" type="button" id="searchProductButton">Buscar</button>
+                   <button class="btn btn-warning" type="button" id="clearSearchButton">Limpar</button>
+                </div>
+             </div>
+             <div class="product-list " style="max-height:300px; overflow:auto;">
+                <table class="table" >
+                   <thead>
+                      <tr>
+                         <th scope="col">Cód.</th>
+                         <th scope="col">Descrição</th>
+                         <th scope="col">Valor</th>
+                         <th scope="col">Estoque</th>
+                         <th scope="col">Qtd</th>
+                         <th scope="col">Adicionar</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                      <!-- Aqui você pode usar Django Template Language para preencher os dados do produto -->
+                      {% for produto in todos_produtos %}
+                      <tr>
+                         <th>{{ produto.codigo }}</th>
+                         <td>{{ produto.descricao }}</td>
+                         <td>R${{ produto.valor|floatformat:2 }}</td>
+                         <td>{{ produto.quantidade }}</td>
+                         <td><input type="number" class="product-quantity" value="0" style="width: 50px;"></td>
+                         <td>
+                            <form id="form-{{ produto.codigo }}" method="POST" action="{% url 'pdvWeb:adicionar_produto' venda.id %}">
+                               {% csrf_token %}
+                               <input type="hidden" name="codigo_produto" value="{{ produto.codigo }}">
+                               <input type="hidden" name="quantidade" class="quantity-input" value="1">
+                               <button type="submit" class="btn btn-primary add-to-cart-button"><i class="bi bi-cart-check"></i></button>
+                            </form>
+                         </td>
+                      </tr>
+                      {% endfor %}
+                   </tbody>
+                </table>
+             </div>
+          </div>
+          <div class="modal-footer">
+             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- Modal FORMA DE PAGAMENTO-->
+ <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="paymentModalLabel">Forma de Pagamento</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <div class="row">
+                <div class="col-sm-6 mb-4">
+                   <div class="card text-center">
+                      <div class="card-body">
+                         <i class="fas fa-money-bill-wave fa-3x mb-3"></i>
+                         <h5 class="card-title">Dinheiro</h5>
+                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#finalizarVendaModal">Selecionar</button>
+                      </div>
+                   </div>
+                </div>
+                <div class="col-sm-6 mb-4">
+                   <div class="card text-center">
+                      <div class="card-body">
+                         <i class="fas fa-credit-card fa-3x mb-3"></i>
+                         <h5 class="card-title">Crédito</h5>
+                         <button type="button" class="btn btn-primary" disabled>Selecionar</button>
+                      </div>
+                   </div>
+                </div>
+                <div class="col-sm-6 mb-4">
+                   <div class="card text-center">
+                      <div class="card-body">
+                         <i class="fas fa-credit-card fa-3x mb-3"></i>
+                         <h5 class="card-title">Débito</h5>
+                         <button type="button" class="btn btn-primary" disabled>Selecionar</button>
+                      </div>
+                   </div>
+                </div>
+                <div class="col-sm-6 mb-4">
+                   <div class="card text-center">
+                      <div class="card-body">
+                         <i class="fas fa-ticket-alt fa-3x mb-3"></i>
+                         <h5 class="card-title">Ticket</h5>
+                         <button type="button" class="btn btn-primary" disabled>Selecionar</button>
+                      </div>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- Modal FINALIZAR PAGAMENTO-->
+ <div class="modal fade" id="finalizarVendaModal" tabindex="-1" role="dialog" aria-labelledby="finalizarVendaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="finalizarVendaModalLabel">Finalizar Venda</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <form method="POST" action="{% url 'pdvWeb:finalizar_venda' venda.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                   <label for="valorRecebido">Valor Recebido</label>
+                   <input type="number" name='recebido' class="form-control" id="valorRecebido" placeholder="Insira o valor recebido">
+                </div>
+                <div class="form-group">
+                   <label for="valorProduto">Valor da venda</label>
+                   <input type="text" class="form-control" id="valorProduto" value="{{venda.total|floatformat:2}}" disabled>
+                </div>
+                <div class="form-group">
+                   <label for="valorTroco">Valor do Troco</label>
+                   <input type="number"  name='troco' class="form-control" id="valorTroco" disabled>
+                </div>
+          </div>
+          <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+          <button type="submit" class="btn btn-primary">Finalizar</button>
+          </div>
+          </form>
+       </div>
+    </div>
+ </div>
+ <!-- Modal CPF NA NOTA?-->
+ <div class="modal fade" id="cpfCliente" tabindex="-1" role="dialog" aria-labelledby="finalizarVendaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="finalizarVendaModalLabel">Deseja cpf na nota?</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <form method="POST" action="{% url 'pdvWeb:nova_venda' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                   <label for="valorRecebido">Cpf do cliente</label>
+                   <input type="password" name='cpf' class="form-control" id="valorRecebido" placeholder="Insira cpf do cliente">
+                </div>
+          </div>
+          <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Iniciar Venda</button>
+          </div>
+          </form>
+       </div>
+    </div>
+ </div>
+ <!-- Modal CONSULTAR PRODUTOS-->
+ <div class="modal fade" id="vendaAberta" tabindex="-1" role="dialog" aria-labelledby="finalizarVendaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="finalizarVendaModalLabel">Vendas Abertas</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+             <div class="product-list " style="max-height:300px; overflow:auto;">
+                <table class="table" >
+                   <thead>
+                      <tr>
+                         <th scope="col">Venda</th>
+                         <th scope="col">cliente</th>
+                         <th scope="col">Data</th>
+                         <th scope="col">Retornar a venda</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                      <!-- Aqui você pode usar Django Template Language para preencher os dados do produto -->
+                      {% for venda_aberta in venda_aberta %}
+                      <tr>
+                         <th>00{{ venda_aberta.id }}</th>
+                         <td>{{ venda_aberta.cpf_cliente }}</td>
+                         <td>{{ venda_aberta.data}}</td>
+                         <td><a href="{% url 'pdvWeb:adicionar_produto' venda_aberta.id %}" class="btn btn-primary"><i class="bi bi-cart-check"></i></a></td>
+                      </tr>
+                      {% endfor %}
+                   </tbody>
+                </table>
+             </div>
+          </div>
+          <div class="modal-footer">
+             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+          </div>
+       </div>
+    </div>
+ </div>
+ <!-- Modal de confirmação de cancelamento de venda -->
+ <div class="modal fade" id="cancelarVendaModal" tabindex="-1" role="dialog" aria-labelledby="cancelarVendaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h5 class="modal-title" id="cancelarVendaModalLabel">Cancelar Venda</h5>
+             <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+             <span aria-hidden="true">&times;</span>
+             </button>
+          </div>
+          <div class="modal-body">
+             Tem certeza que deseja cancelar esta venda?
+          </div>
+          <div class="modal-footer">
+             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+             <a href="{% url 'pdvWeb:cancelar_venda' venda.id %}" class="btn btn-danger">Confirmar Cancelamento</a>
+          </div>
+       </div>
+    </div>
+ </div>

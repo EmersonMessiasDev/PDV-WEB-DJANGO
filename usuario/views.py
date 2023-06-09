@@ -14,8 +14,10 @@ def cadastro(request):
 
 def funcionarios(request):
   funcionarios = Funcionario.objects.all()
+  usuario = request.session.get('usuario')
+  request_usuario = Funcionario.objects.get(id = usuario )
   
-  return render(request, 'funcionarios.html', {'funcionarios': funcionarios})
+  return render(request, 'funcionarios.html', {'funcionarios': funcionarios,'usuario':request_usuario})
 
 
 
@@ -56,7 +58,9 @@ def sair(request):
 
 
 def gerencia(request):
-  return render(request, 'gerencia.html')
+    usuario = request.session.get('usuario')
+    request_usuario = Funcionario.objects.get(id = usuario ) 
+    return render(request, 'gerencia.html', {'usuario':request_usuario})
 
 
 

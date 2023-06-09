@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+   <head>
+      <style>
+         body {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         height: 100vh;
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         background-color: #f4f4f4;
+         }
+         .card {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         width: 70%;
+         background-color: #fff;
+         border-radius: 20px;
+         padding: 20px;
+         box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.15);
+         }
+         .printer-ticket {
+         display: table;
+         width: 100%;
+         max-width: 400px;
+         font-family: Tahoma, Geneva, sans-serif;
+         font-size: 10px;
+         line-height: 1.3em;
+         text-align: center;  /* centraliza todo o texto */
+         }
+         .printer-ticket * {
+         line-height: 1.3em;
+         }
+         .printer-ticket td, .printer-ticket th {
+         padding: 10px;
+         border-bottom: 1px dashed #bcbcbc;
+         text-align: center;  /* adicionado */ 
+         font-size: 1.2em; /* define tamanho da fonte para 1.2em */ 
+         }
+         .printer-ticket th.title {
+         font-size: 3em;
+         padding: 15px 0;
+         }
+         .printer-ticket .sup td {
+         padding: 10px 0;
+         border-top: 1px dashed #bcbcbc;
+         }
+         .printer-ticket .sup.p--0 td {
+         padding-bottom: 0;
+         }
+         .printer-ticket h1 {
+         font-size: 1.8em; /* aumenta de 1.5em para 1.8em */ 
+         }
+         .printer-ticket small {
+         font-size: 1em;  /* adicionado */  
+         }
+         table {
+         margin: 0 auto;  /* adicionado */
+         }
+      </style>
+   </head>
+   <body>
+      <div class="card" >
+      <section class="printer-ticket" id="pdf-content">
+         <a href="{% url 'pdvWeb:home' %}" class="logo"><img src="{% static 'pdv/img/DefPdv.png' %}" alt="DefPdv" style="width:250px; margin-top: -4rem; margin-bottom: -5rem;"></a>
+         <h1>Mercadinho LA ELE!</h1>
+         <small><time datetime="2020-01-01">{{venda.data}}</time></small>
+         <h2>Cliente</h2>
+         <small>{{cpf_cliente}}</small>
+         <h3>Cupom não fiscal</h3>
+         <table>
+            <thead>
+               <tr>
+                  <th colspan="2">Descrição</th>
+                  <th>Valor Unit.</th>
+                  <th>Qtd.</th>
+                  <th>Total</th>
+               </tr>
+            </thead>
+            <tbody>
+               {% for itens in itens  %}
+               <tr>
+                  <td colspan="2">{{itens.produto}}</td>
+                  <td>R$ {{itens.produto.valor|floatformat:2}}</td>
+                  <td>{{itens.quantidade}}</td>
+                  <td>R$ {{itens.subtotal|floatformat:2}}</td>
+               </tr>
+               {% endfor %}
+            </tbody>
+         </table>
+         <p><strong>Totais</strong></p>
+         <p>Sub-total: R${{venda.total|floatformat:2}}</p>
+         <p>Desconto: 0,00%</p>
+         <p>Total: R${{venda.total|floatformat:2}}</p>
+         <p><strong>Pagamentos</strong></p>
+         <p>Dinheiro: R${{recebido|floatformat:2}}</p>
+         <p>Total pago: R${{venda.total|floatformat:2}}</p>
+         <p>Troco: R${{troco|floatformat:2}}</p>
+         <h3>Venda -  00{{venda.id}}</h3>
+         <h3>Caixa - {{nota_fiscal.funcionario.cpf}}</h3>
+      </section>
+      <button id="download-pdf">Emitir nota</button>
+   </body>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+   <script>
+      // Adiciona um event listener ao botão "Download PDF"
+      document.getElementById("download-pdf").addEventListener("click", function() {
+          // Obtém o conteúdo HTML da página
+          var elementHTML = document.getElementById("pdf-content");
+      
+          // Cria as opções de configuração para o html2pdf
+          var opt = {
+              margin: [15, 15, 15, 15],
+              filename: 'mercadinho.pdf',
+              image: { type: 'jpeg', quality: 0.98 },
+              html2canvas: { scale: 2 },
+              jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+          };
+      
+          // Converte o elemento HTML para PDF usando html2pdf
+          html2pdf().set(opt).from(elementHTML).save();
+      });
+   </script>
+</html>

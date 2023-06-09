@@ -1,50 +1,46 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <title>Cadastro de Funcionário</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{% static 'pdv/css/style.css' %}">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</head>
-<body>
-
-<div class="jumbotron text-center">
-  <h1>Atualização de Funcionário</h1>
-</div>
-  
-<div class="container">
-  <form action="{% url 'usuario:atualizar_funcionario' funcionario.id %}" method="POST">
-    {% csrf_token %}
-    <div class="form-group">
-      <label for="nome">Nome:</label>
-      <input type="text" class="form-control" name="nome" id="nome" value="{{funcionario.nome}}" required>
-    </div>
-    <div class="form-group">
-      <label for="cpf">CPF:</label>
-      <input type="text" class="form-control" name=cpf id="cpf" value="{{funcionario.cpf}}" maxlength="11" required>
-    </div>
-    <div class="form-group">
-      <label for="cargo">Cargo:</label>
-      <select class="form-control" name="cargo" id="cargo" required>
-        {% for cargo in cargos %}
-          {% if cargo == funcionario.cargo %}
-            <option value="{{ cargo.id }}" selected>{{ cargo.nome }}</option>
-          {% else %}
-            <option value="{{ cargo.id }}">{{ cargo.nome }}</option>
-          {% endif %}
-        {% endfor %}
-      </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Atualizar</button>
-    <a href="{% url 'usuario:funcionarios' %}" class="btn btn-primary">Voltar</a>
-
-  </form>
-</div>
-
-</body>
+   <head>
+      <title>Cadastro de Funcionário</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      <link rel="stylesheet" href="{% static 'pdv/css/style.css' %}">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+   </head>
+   <body>
+      <div class="jumbotron text-center">
+         <h1>Atualização de Funcionário</h1>
+      </div>
+      <div class="container">
+         <form action="{% url 'usuario:atualizar_funcionario' funcionario.id %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+               <label for="nome">Nome:</label>
+               <input type="text" class="form-control" name="nome" id="nome" value="{{funcionario.nome}}" required>
+            </div>
+            <div class="form-group">
+               <label for="cpf">CPF:</label>
+               <input type="text" class="form-control" name=cpf id="cpf" value="{{funcionario.cpf}}" maxlength="11" required>
+            </div>
+            <div class="form-group">
+               <label for="cargo">Cargo:</label>
+               <select class="form-control" name="cargo" id="cargo" required>
+                  {% for cargo in cargos %}
+                  {% if cargo == funcionario.cargo %}
+                  <option value="{{ cargo.id }}" selected>{{ cargo.nome }}</option>
+                  {% else %}
+                  <option value="{{ cargo.id }}">{{ cargo.nome }}</option>
+                  {% endif %}
+                  {% endfor %}
+               </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Atualizar</button>
+            <a href="{% url 'usuario:funcionarios' %}" class="btn btn-primary">Voltar</a>
+         </form>
+      </div>
+   </body>
 </html>

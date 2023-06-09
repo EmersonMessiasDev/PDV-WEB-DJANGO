@@ -1,43 +1,74 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <title>Listagem de Funcionários</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'pdv/css/style.css' %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  </head>
-  <body>
-
-    <div class="container">
-      <h1 class="title">Lista de Funcionários</h1>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Cargo</th>
-            <th>CPF</th>
-            <th colspan="2">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for funcionario in funcionarios %}
-            <tr>
-              <td>{{funcionario.nome}}</td>
-              <td>{{funcionario.cargo}}</td>
-              <td>{{funcionario.cpf}}</td>
-              <td><a href="{% url 'usuario:atualizando_funcionario' funcionario.id %}">Atualizar</a></td>
-              <td><a href="{% url 'usuario:deletar_funcionario' funcionario.id %}">Deletar</a></td>
-            </tr>
-          {% endfor %}
-      </table>
-      <a href="{% url 'usuario:cadastro' %}" class="btn btn-cadastrar">Cadastrar Usuário</a>
-      <a href="{% url 'usuario:gerencia' %}" class="btn btn-cadastrar">Voltar</a>
-    </div>
-
-  </body>
+   <head>
+      <title>PDV Web</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      <link rel="stylesheet" href="{% static 'pdv/css/style.css' %}">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+   </head>
+   <body>
+      <div class="container-fluid">
+      <div class="row">
+      <div class="col-2 sidebar">
+         <h3><a href="{% url 'pdvWeb:home' %}" class="logo"><img src="{% static 'pdv/img/logoVenda.png' %}" alt="DefPdv" style="width:250px; margin-top: -6rem;"></a></h3>
+         {% if usuario %}
+         <div class="usuario-info">
+            <p id="datetime" class="card-text"></p>
+            <!-- Novo parágrafo para a data e hora -->
+            <p><i class="bi bi-person-circle"></i> {{usuario.nome}}</p>
+            <p><i class="bi bi-upc-scan"></i> {{usuario.cpf}}</p>
+            <p><i class="bi bi-bag"></i> {{usuario.cargo.nome}}</p>
+         </div>
+         <div class="action-usuario">
+            <a href="{% url 'usuario:sair' %}" class="nav-link">Logout</a>
+         </div>
+         {% else %}
+         <a href="{% url 'usuario:login' %}" class="nav-link">Login</a>
+         {% endif %}
+      </div>
+      <div class="col main">
+        <div class="container">
+          <h1 class="title">Lista de Funcionários</h1>
+          <table class="table">
+             <thead>
+                <tr>
+                   <th>Nome</th>
+                   <th>Cargo</th>
+                   <th>CPF</th>
+                   <th colspan="2">Ações</th>
+                </tr>
+             </thead>
+             <tbody>
+                {% for funcionario in funcionarios %}
+                <tr>
+                   <td>{{funcionario.nome}}</td>
+                   <td>{{funcionario.cargo}}</td>
+                   <td>{{funcionario.cpf}}</td>
+                   <td><a href="{% url 'usuario:atualizando_funcionario' funcionario.id %}">Atualizar</a></td>
+                   <td><a href="{% url 'usuario:deletar_funcionario' funcionario.id %}">Deletar</a></td>
+                </tr>
+                {% endfor %}
+          </table>
+          <a href="{% url 'usuario:cadastro' %}" class="btn btn-cadastrar">Cadastrar Usuário</a>
+          <a href="{% url 'usuario:gerencia' %}" class="btn btn-cadastrar">Voltar</a>
+       </div>
+      </div>
+   </body>
+   <script>
+      var dt = new Date();
+      document.getElementById("datetime").innerHTML = '<i class="bi bi-clock-history"></i> ' + dt.toLocaleString();
+      
+      setInterval(function() {
+          dt = new Date();
+          document.getElementById("datetime").innerHTML = '<i class="bi bi-clock-history"></i> ' + dt.toLocaleString();
+      }, 1000);
+   </script>
+   <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </html>
