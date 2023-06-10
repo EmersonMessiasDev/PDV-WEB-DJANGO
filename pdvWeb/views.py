@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.contrib.messages import constants
 from django.contrib import messages
 from django.utils import timezone
+from .utils import *
 
 #---------------------------------------------------------------------------------------------------
 # todo                                      Renderização de paginas
@@ -30,16 +31,6 @@ def produtos(request):
     return render(request, 'lista_produtos.html', {'produtos': produtos,'usuario':request_usuario})
 
 
-def cadastro_produto(request):
-  return render(request, 'cadastro_produto.html')
-
-
-def atualizacao_produto(request, id):
-  produto = Produto.objects.get(id = id)
-  
-  return render(request, 'atualizacao_produto.html', {'produto': produto})
-
-
 def todos_produtos(request):
     produtos = Produto.objects.all().values('codigo', 'descricao', 'valor', 'quantidade')
     produtos_list = list(produtos)  
@@ -55,47 +46,39 @@ def cadastrar_produto(request):
   v_valor = float(request.POST.get('valor'))
   v_quantidade = int(request.POST.get('quantidade'))
   
-  Produto.objects.create(codigo = v_codigo, descricao = v_descricao, valor = v_valor, quantidade = v_quantidade)
+  produto = Produto.objects.filter(codigo = v_codigo)
+  if produto.exists():
+    messages.error(request, 'ERROR! Código do produto já existe!')
+    return redirect('pdvWeb:produtos')
   
+  Produto.objects.create(codigo = v_codigo, descricao = v_descricao, valor = v_valor, quantidade = v_quantidade)
+  messages.success(request, 'Produto cadastrado com sucesso!')
   return redirect('pdvWeb:produtos')
 
 
-
 def atualizar_produto(request, id):
-  v_codigo = int(request.POST.get('codigo'))
-  v_descricao = request.POST.get('descricao')
-  v_valor = request.POST.get('valor')
-  v_valor =  v_valor.replace('R$', '')
-  v_valor = v_valor.replace(',', '.')
-  v_valor = float(v_valor)
-  v_quantidade = int(request.POST.get('quantidade'))
+    produto = Produto.objects.get(id = id)
+    v_codigo = int(request.POST.get('codigo'))
+    v_descricao = request.POST.get('descricao')
+    v_valor = request.POST.get('valor')
+    v_valor =  v_valor.replace('R$', '')
+    v_valor = v_valor.replace(',', '.')
+    v_valor = float(v_valor)
+    v_quantidade = int(request.POST.get('quantidade'))
+    
+    if not validar_produto(request, v_codigo, v_descricao, v_valor, v_quantidade ):
+        messages.add_message(request, messages.ERROR, 'DEU MERDA!')
+        return redirect('pdvWeb:produtos')
+    
+    
+    produto.descricao = v_descricao
+    produto.valor = v_valor
+    produto.quantidade = v_quantidade
+    produto.save()
+    
+    messages.add_message(request, messages.SUCCESS, 'Produto atualizado com sucesso!')
+    return redirect('pdvWeb:produtos')
   
-  produto = Produto.objects.get(id = id)
-  
-  if v_codigo > 0:
-    produto.codigo = v_codigo
-    if v_descricao != '':
-      produto.descricao = v_descricao
-      if v_valor > 0 and v_valor != '':
-        produto.valor = v_valor
-        if v_quantidade != '':
-          produto.quantidade = v_quantidade
-          produto.save()
-          return redirect('pdvWeb:produtos')
-        else:
-          id_produto = produto.id
-          return redirect('pdvWeb:atualizacao_produto', id_produto)
-      else:
-        id_produto = produto.id
-        return redirect('pdvWeb:atualizacao_produto', id_produto)
-    else:
-      id_produto = produto.id
-      return redirect('pdvWeb:atualizacao_produto', id_produto)
-  else:
-    id_produto = produto.id
-    return redirect('pdvWeb:atualizacao_produto', id_produto)
-
-
 
 def deletar_produto(request, id):
   produto = Produto.objects.get(id = id)

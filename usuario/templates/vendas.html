@@ -39,8 +39,8 @@
       </div>
       <div class="col main">
          <h1 class="text-center m-4 title"><i class="bi bi-graph-up"></i> Acompanhamento de Vendas</h1>
-         <div class="mb-5">
-            <div class="row mb-5">
+         <div class="mb-3">
+            <div class="row mb-3">
             <!-- Card -->
             <div class="col-lg-3 col-md-6 mb-8">
                <div class="card">
@@ -56,10 +56,6 @@
                            <h4 class="mb-0">R$ {{valor_bruto|floatformat:2}}</h4>
                         </div>
                      </div>
-                  </div>
-                  <hr class="dark horizontal my-0">
-                  <div class="card-footer p-3 mb-6">
-                     <p class="mb-0">Valor bruto de todas as vendas</p>
                   </div>
                </div>
             </div>
@@ -79,10 +75,6 @@
                         </div>
                      </div>
                   </div>
-                  <hr class="dark horizontal my-0">
-                  <div class="card-footer p-3 mb-6">
-                     <p class="mb-0">Quantidade total de vendas finalizadas.</p>
-                  </div>
                </div>
             </div>
             <!-- Card -->
@@ -100,10 +92,6 @@
                            <h4 class="mb-0">R$ {{ticket_medio|floatformat:2}}</h4>
                         </div>
                      </div>
-                  </div>
-                  <hr class="dark horizontal my-0">
-                  <div class="card-footer p-3 mb-6">
-                     <p class="mb-0">Medias das vendas</p>
                   </div>
                </div>
             </div>
@@ -127,23 +115,19 @@
                         </div>
                      </div>
                   </div>
-                  <hr class="dark horizontal my-0">
-                  <div class="card-footer p-3 mb-6">
-                     <p class="mb-0">Total de vendas hoje!</p>
-                  </div>
                </div>
             </div>
         </div>
             <!-- Adicione mais cards conforme o exemplo acima -->
-            <hr>
             <div class="row">
             <!-- Ranking de funcionários -->
             <div class="col-lg-6 col-md-6">
                <div class="card h-100">
                   <div class="card-header pb-0">
-                     <h6>Ranking de Funcionários</h6>
+                     <h6>Top 3 de Funcionários <i class="bi bi-people-fill text-custom"></i> </h6>
                   </div>
                   <div class="card-body p-3">
+                     <div class="product-list " style="max-height:200px; overflow:auto;">
                      <table class="table">
                         <thead>
                            <tr>
@@ -152,7 +136,7 @@
                            </tr>
                         </thead>
                         <tbody>
-                            {% for ranking  in ranking %}
+                            {% for ranking  in ranking|slice:":3" %}
                            <tr>
                               <td>{{ranking.funcionario__nome}}</td>
                               <td>R$ {{ranking.vendas_total}}</td>
@@ -161,6 +145,7 @@
                            <!-- Adicione mais linhas conforme necessário -->
                         </tbody>
                      </table>
+                     </div>
                   </div>
                </div>
             </div>
@@ -168,20 +153,19 @@
             <div class="col-lg-6 col-md-6">
                <div class="card h-100">
                   <div class="card-header pb-0">
-                     <h6>Linha do Tempo de Vendas</h6>
+                     <h6>Linha do Tempo de Vendas <i class="bi bi-bar-chart-fill text-custom"></i></h6>
                   </div>
                   <div class="card-body p-3">
                      <div class="timeline timeline-one-side">
-                        <div class="timeline-block mb-3">
-                           <span class="timeline-step">
-                           <i class="material-icons text-success text-gradient">notifications</i>
-                           </span>
-                           {% for venda in historico_venda %}
+                        <div class="product-list " style="max-height:200px; overflow:auto;">
+                        <div class="timeline-block mb-3">                         
+                           {% for venda in historico_venda|slice:":3" %}
                            <div class="timeline-content">
-                              <h6 class="text-dark text-sm font-weight-bold mb-0">Venda de R$ {{venda.total}} por {{venda.funcionario}}</h6>
-                              <p class="text-secondary font-weight-bold text-xs mt-1 mb-0"><time datetime="2020-01-01">{{venda.data_venda}}</time></p>
+                              <h6 class="text-dark text-sm font-weight-bold mb-0">Venda de R$ {{venda.total|floatformat:2}} por {{venda.funcionario}}</h6>
+                              <hr>
                            </div>
                            {% endfor %}
+                           
                         </div>
                         <!-- Adicione mais blocos conforme necessário -->
                      </div>
@@ -189,7 +173,71 @@
                </div>
             </div>
         </div>
+      </div>
          </div>
+         <div class="row">
+            <!-- Produtos mais vendidos -->
+            <div class="col-lg-6 col-md-6">
+                <div class="card h-100">
+                    <div class="card-header pb-0">
+                        <h6>Produtos Mais Vendidos <i class="bi bi-star-fill text-yellow"></i></h6>
+                    </div>
+                    <div class="card-body p-3">
+                     <div class="product-list " style="max-height:200px; overflow:auto;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Código</th>
+                                    <th scope="col">Produto</th>
+                                    <th scope="col">Quantidade Vendida</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for produto in produto_mais_vendido %}
+                                <tr>
+                                    <td>{{produto.produto__codigo}}</td>
+                                    <td>{{produto.produto__descricao}}</td>
+                                    <td>{{produto.total_vendido}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                     </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Alerta de Estoque Baixo -->
+            <div class="col-lg-6 col-md-6">
+                <div class="card h-100">
+                    <div class="card-header pb-0">
+                        <h6>Alerta: Estoque Baixo <i class="bi bi-exclamation-triangle-fill text-danger"></i>
+                        </h6>
+                    </div>
+                    <div class="card-body p-3">
+                     <div class="product-list " style="max-height:200px; overflow:auto;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Código</th>
+                                    <th scope="col">Produto</th>
+                                    <th scope="col">Quantidade em Estoque</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for produto in estoque_baixo %}
+                                <tr>
+                                    <td>{{produto.codigo}}</td>
+                                    <td>{{produto.descricao}}</td>
+                                    <td><span class="badge bg-danger text-white">{{produto.quantidade}} <i class="bi bi-arrow-bar-down"></i></span></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                     </div>
+                    </div>
+                </div>
+            </div>
+        </div>
       </div>
    </body>
    <script>

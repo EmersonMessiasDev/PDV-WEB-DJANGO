@@ -46,8 +46,8 @@
             <div class="form-row d-flex justify-content-between align-items-center">
                <h2>Venda -  00{{venda.id}}</h2>
                <div>
-                  <a href="" data-toggle="modal" data-target="#cpfCliente" class="btn btn-info mt-2 mb-2">Nova Venda</a>
-                  <a type="button" class="btn btn-info mt-2 mb-2" data-toggle="modal" data-target="#vendaAberta">Vendas em aberto</a>
+                  <a href="" data-toggle="modal" data-target="#cpfCliente" class="btn btn-info mt-2 mb-2"><i class="bi bi-cart-plus-fill"></i> Nova Venda</a>
+                  <a type="button" class="btn btn-info mt-2 mb-2" data-toggle="modal" data-target="#vendaAberta"><i class="bi bi-list-check"></i> Vendas em aberto</a>
                </div>
             </div>
             <hr>
@@ -65,8 +65,8 @@
                   </div>
                   <div class="col">
                      <br>
-                     <button type="submit" class="btn btn-primary mt-2 mb-2">Adicionar</button>
-                     <button type="button"  class="btn btn-info mt-2 mb-2" data-toggle="modal" data-target="#consultarProduto">Consultar produto</button>
+                     <button type="submit" class="btn btn-primary mt-2 mb-2"><i class="bi bi-plus-circle"></i> Adicionar</button>
+                     <button type="button"  class="btn btn-info mt-2 mb-2" data-toggle="modal" data-target="#consultarProduto"><i class="bi bi-search"></i> Consultar produto</button>
                   </div>
                </div>
             </form>
@@ -128,8 +128,8 @@
             <input type="text" class="form-control" id="totalInput" placeholder="R$ {{venda.total|floatformat:2}}" disabled>
          </div>
          <div class="action-buttons mt-2">
-            <button class="btn btn-success" data-toggle="modal" data-target="#paymentModal">Finalizar Venda</button>
-            <a class="btn btn-danger" data-toggle="modal" data-target="#cancelarVendaModal">Cancelar Venda</a>
+            <button class="btn btn-success" data-toggle="modal" data-target="#paymentModal"><i class="bi bi-check2-circle"></i> Finalizar Venda</button>
+            <a class="btn btn-danger" data-toggle="modal" data-target="#cancelarVendaModal"><i class="bi bi-x-circle"></i> Cancelar Venda</a>
          </div>
       </div>
    </body>

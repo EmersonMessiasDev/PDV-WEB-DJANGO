@@ -8,11 +8,30 @@ from pdvWeb.models import *
 from django.db.models import Sum
 import datetime
 
+#---------------------------------------------------------------------------------------------------
+# todo                                      Renderização de paginas
+#---------------------------------------------------------------------------------------------------
+
 def cadastro(request):
   cargos = Cargo.objects.all()
   
   return render(request, 'cadastro.html', {'cargos': cargos})
 
+
+def login(request):
+  return render(request, 'login.html')
+
+
+def sair(request):
+    messages.success(request,  'Você saiu do portal!')
+    request.session.flush()
+    return redirect('usuario:login')
+
+
+def gerencia(request):
+    usuario = request.session.get('usuario')
+    request_usuario = Funcionario.objects.get(id = usuario ) 
+    return render(request, 'gerencia.html', {'usuario':request_usuario})
 
 
 def funcionarios(request):
@@ -24,9 +43,9 @@ def funcionarios(request):
   return render(request, 'funcionarios.html', {'cargos':cargos,'funcionarios': funcionarios,'usuario':request_usuario})
 
 
-
-def login(request):
-  return render(request, 'login.html')
+#---------------------------------------------------------------------------------------------------
+# todo                                      Renderização de admin
+#---------------------------------------------------------------------------------------------------
 
 def validar_login(request):
     nome = request.POST.get('nome')
@@ -52,21 +71,6 @@ def validar_login(request):
       return redirect('pdvWeb:home')
 
       
-
-
-
-def sair(request):
-    messages.add_message(request, constants.SUCCESS, 'Você saiu do portal!')
-    request.session.flush()
-    return redirect('usuario:login')
-
-
-def gerencia(request):
-    usuario = request.session.get('usuario')
-    request_usuario = Funcionario.objects.get(id = usuario ) 
-    return render(request, 'gerencia.html', {'usuario':request_usuario})
-
-
 def vendas(request):
     usuario = request.session.get('usuario')
     request_usuario = Funcionario.objects.get(id = usuario ) 
@@ -78,6 +82,7 @@ def vendas(request):
     .annotate(vendas_total=Sum('total'))  # Soma o total de cada grupo
     .order_by('-vendas_total')  # Ordena em ordem decrescente pelo total de vendas
     )    
+    
     top_vendedor = ranking_funcionarios.first()
     top_vendedor = top_vendedor['funcionario__nome']
     # Obter a data atual
@@ -97,7 +102,16 @@ def vendas(request):
                 'data_venda': venda.data
             })
 
+    # Pega todos os produtos com quantidade em estoque abaixo de 100
+    produtos_estoque_baixo = Produto.objects.filter(quantidade__lt=100)
 
+    # Pega os 5 produtos mais vendidos
+    produtos_mais_vendidos = ItemVenda.objects.values('produto__codigo', 'produto__descricao').annotate(total_vendido=Sum('quantidade')).order_by('-total_vendido')[:5]
+
+    # Recupera os produtos usando os ids obtidos da consulta acima
+
+    # Pega a quantidade vendida do produto mais vendido
+    print(produtos_mais_vendidos)
     context ={
       'usuario':request_usuario,
       'total_venda':total_venda,
@@ -106,7 +120,9 @@ def vendas(request):
       'ranking':ranking_funcionarios,
       'top_vendedor':top_vendedor,
       'vendas_dia':vendas_dia,
-      'historico_venda':vendas
+      'historico_venda':vendas,
+      'produto_mais_vendido':produtos_mais_vendidos,
+      'estoque_baixo':produtos_estoque_baixo,
       }
     
     return render(request, 'vendas.html', context)
@@ -118,19 +134,15 @@ def cadastrar_funcionario(request):
   v_cargo = request.POST.get('cargo')
   cargo = Cargo.objects.get(id = v_cargo)
   
+  funcionario = Funcionario.objects.filter(cpf=v_cpf)
+  if funcionario.exists():
+     messages.error(request,  'ERROR! CPF já está cadastrado!')
+     return redirect('usuario:funcionarios')
+  
   Funcionario.objects.create(nome = v_nome, cpf = v_cpf, cargo = cargo)
   
+  messages.success(request,  'Funcionario cadastrado com sucesso!')
   return redirect('usuario:funcionarios')
-
-
-
-def atualizando_funcionario(request, id):
-  funcionario = Funcionario.objects.get(id = id)
-  cargos = Cargo.objects.all()
-  
-  return render(request, 'atualizando_funcionario.html', {'funcionario': funcionario,
-                                                   'cargos': cargos})
-  
   
   
 def atualizar_funcionario(request, id):
@@ -146,14 +158,14 @@ def atualizar_funcionario(request, id):
   funcionario.cargo = cargo
   
   funcionario.save()
-  messages.add_message(request, constants.ERROR, 'Funcionario atualizado com sucesso!')
+  messages.add_message(request, constants.SUCCESS, 'Funcionario atualizado com sucesso!')
   return redirect('usuario:funcionarios')
-
 
 
 def deletar_funcionario(request, id):
   funcionario = Funcionario.objects.get(id = id)
   
   funcionario.delete()
+  messages.add_message(request, constants.SUCCESS, 'Funcionario excluido com sucesso!')
   return redirect('usuario:funcionarios')
   

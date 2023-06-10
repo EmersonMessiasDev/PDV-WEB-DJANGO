@@ -1,35 +1,35 @@
-# from django.contrib import messages
-# import constants  # Substitua com a localização real do seu módulo constants
+import re
+from django.contrib import messages
+from django.contrib.messages import constants
+from .models import *
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.conf import settings
+import random
+import string
 
-# has_error = False
 
-# if v_codigo <= 0:
-#     messages.add_message(request, messages.ERROR, constants.INVALID_CODE_ERROR)
-#     has_error = True
-# else:
-#     produto.codigo = v_codigo
+def validar_produto(request, v_codigo, v_descricao, v_valor, v_quantidade ):
+    if v_codigo <= 0 or v_codigo < 3:
+        messages.add_message(request, messages.ERROR, 'Codigo não pode ficar vazio ou ser menor que 3')
+        return False
 
-# if v_descricao == '':
-#     messages.add_message(request, messages.ERROR, constants.INVALID_DESC_ERROR)
-#     has_error = True
-# else:
-#     produto.descricao = v_descricao
+    if v_descricao.strip() == '':
+        messages.add_message(request, messages.ERROR, 'Descrição não pode ficar vazio')
+        return False
 
-# if v_valor <= 0 or v_valor == '':
-#     messages.add_message(request, messages.ERROR, constants.INVALID_VAL_ERROR)
-#     has_error = True
-# else:
-#     produto.valor = v_valor
 
-# if v_quantidade == '':
-#     messages.add_message(request, messages.ERROR, constants.INVALID_QTY_ERROR)
-#     has_error = True
-# else:
-#     produto.quantidade = v_quantidade
+    if v_valor <= 0 or v_valor == '':
+        messages.add_message(request, messages.ERROR, 'Valor não pode ficar vazio')
+        return False
 
-# if has_error:
-#     return redirect('pdvWeb:atualizacao_produto', produto.id)
-# else:
-#     produto.save()
-#     messages.add_message(request, messages.SUCCESS, constants.UPDATE_SUCCESS)
-#     return redirect('pdvWeb:produtos')
+
+    if v_quantidade == '':
+        messages.add_message(request, messages.ERROR, 'Quantidade não pode ficar vazio')
+        return False
+    
+    return True
+
+
+

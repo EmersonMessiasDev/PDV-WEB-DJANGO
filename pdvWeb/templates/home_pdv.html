@@ -39,11 +39,11 @@
       <div class="col main">
          <div class="add-product text-center">
             <img src="{% static 'pdv/img/CaixaLivre.png' %}" alt="Some description" style="max-width: 100%;"><br>
-            <a href="" data-toggle="modal" data-target="#cpfCliente"  class="btn btn-success mt-2 mb-2" >Iniciar Venda</a>
+            <a href="" data-toggle="modal" data-target="#cpfCliente"  class="btn btn-success mt-2 mb-2" ><i class="bi bi-cart-plus-fill"></i> Iniciar Venda</a>
             {% if venda_aberta %}
-            <a type="button" class="btn btn-info mt-2 mb-2" data-toggle="modal" data-target="#vendaAberta">Vendas em aberto</a>
+            <a type="button" class="btn btn-info mt-2 mb-2" data-toggle="modal" data-target="#vendaAberta"><i class="bi bi-list-check"></i> Vendas em aberto</a>
             {% else %}
-            <a type="button" class="btn btn-info mt-2 mb-2 disabled" data-toggle="modal" data-target="#vendaAberta" >Vendas em aberto</a>
+            <a type="button" class="btn btn-info mt-2 mb-2 disabled" data-toggle="modal" data-target="#vendaAberta" ><i class="bi bi-list-check"></i> Vendas em aberto</a>
             {% endif %}
             {% comment %} <a href="{% url 'pdvWeb:nova_venda' %}"  class="btn btn-primary mt-4" >Iniciar Venda</a> {% endcomment %}
          </div>
@@ -121,7 +121,7 @@
                      </div>
                </div>
                <div class="modal-footer">
-               <button type="submit" class="btn btn-primary">Iniciar Venda</button>
+               <button type="submit" class="btn btn-primary"><i class="bi bi-cart-plus-fill"></i> Iniciar Venda</button>
                </div>
                </form>
             </div>
