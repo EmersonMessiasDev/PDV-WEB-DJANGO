@@ -121,5 +121,49 @@ thead th {
   z-index: 10; /* opicional: para garantir que o cabeçalho apareça na frente de todos os outros elementos */
 }
 
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-/* NOTA FISCAL */
+.icon-lg {
+  font-size: 4rem; /* Ajuste para o tamanho que você quiser */
+}
+
+.icon-shape {
+  width: 60px; /* Defina a largura do quadrado */
+  height: 60px; /* Defina a altura do quadrado */
+  border-radius: 15%; /* Ajuste o raio da borda para torná-lo mais quadrado */
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(to right, #0020d6 0%, #0fbbff 99%, #fad0c4 100%);
+}
+
+.shadow-primary {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.border-radius-xl {
+  border-radius: 1rem; /* Ajuste para o raio de borda que você quiser */
+}
+
+.mt-n4 {
+  margin-top: -1.5rem; /* Ajuste para o tamanho da margem negativa que você quiser */
+}
+
+.position-absolute {
+  position: absolute;
+}
+
+
+
+
+
+
+

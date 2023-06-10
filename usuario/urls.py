@@ -14,6 +14,8 @@ urlpatterns = [
     path('atualizar_funcionario/<int:id>', atualizar_funcionario, name='atualizar_funcionario'),
     path('deletar_funcionario/<int:id>', deletar_funcionario, name='deletar_funcionario'),
     path('validar_login/', validar_login, name='validar_login' ),
-    path('sair/', sair, name='sair')
+    path('sair/', sair, name='sair'),
+    path('vendas/', vendas, name='vendas')
+    
     
 ]

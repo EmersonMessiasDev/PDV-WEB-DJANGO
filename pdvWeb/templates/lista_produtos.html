@@ -34,39 +34,119 @@
          {% endif %}
       </div>
       <div class="col main">
-        <div class="container my-5">
-          <h1 class="text-center mb-4 title">Lista de Produtos</h1>
-          <div class="table-responsive">
-             <table class="table table-striped table-hover">
-                <thead>
-                   <tr>
-                      <th>Código</th>
-                      <th>Descrição</th>
-                      <th>Valor</th>
-                      <th>Quantidade</th>
-                      <th colspan="2">Ações</th>
-                   </tr>
-                </thead>
-                <tbody>
-                   {% for produto in produtos %}
-                   <tr>
-                      <td>{{produto.codigo}}</td>
-                      <td>{{produto.descricao}}</td>
-                      <td>R${{produto.valor}}</td>
-                      <td>{{produto.quantidade}}</td>
-                      <td><a href="{% url 'pdvWeb:atualizacao_produto' produto.id %}">Atualizar</a></td>
-                      <td><a href="{% url 'pdvWeb:deletar_produto' produto.id %}">Deletar</a></td>
-                   </tr>
-                   {% endfor %}
-                </tbody>
-             </table>
-          </div>
-          <div class="text-left mb-3">
-             <a href="{% url 'pdvWeb:cadastro_produto' %}" class="btn btn-cadastrar">Cadastrar Produto</a>
-             <a href="{% url 'usuario:gerencia' %}" class="btn btn-cadastrar">Voltar</a>
-          </div>
-       </div>
+      <div class="container my-5">
+      <h1 class="text-center mb-4 title"><i class="bi bi-basket-fill"></i> Lista de Produtos</h1>
+      <div class="table-responsive">
+        <div class="product-list " style="max-height:500px; overflow:auto;">
+         <table class="table table-striped table-hover">
+            <thead>
+               <tr>
+                  <th>Código</th>
+                  <th>Descrição</th>
+                  <th>Valor</th>
+                  <th>Quantidade</th>
+                  <th colspan="2">Ações</th>
+               </tr>
+            </thead>
+            <tbody>
+               {% for produto in produtos %}
+               <tr>
+                  <td>{{produto.codigo}}</td>
+                  <td>{{produto.descricao}}</td>
+                  <td>R${{produto.valor|floatformat:2}}</td>
+                  {% if produto.quantidade <= 100 %}
+                  <td><span class="badge bg-danger text-white">{{produto.quantidade}} <i class="bi bi-arrow-bar-down"></i></span></td>
+                  {% elif produto.quantidade > 100 and produto.quantidade < 150  %}
+                      <td><span class="badge bg-warning text-dark">{{produto.quantidade}} <i class="bi bi-arrows-collapse"></i></span></td>
+                  {% else %}
+                      <td><span class="badge bg-success text-white">{{produto.quantidade}} <i class="bi bi-arrow-bar-up"></i></span></td>
+                  {% endif %}
+              
+                  
+                  <td><a href="javascript:void(0)"  data-toggle="modal" data-target="#atualizarProduto-{{protuto.id}}"><i class="bi bi-pencil-square"></i> Atualizar</a></td>
+                  <td><a href="{% url 'pdvWeb:deletar_produto' produto.id %}" style="color:red;"><i class="bi bi-trash-fill"></i> Deletar</a></td>
+               </tr>
+               <!-- Modal de confirmação de cancelamento de venda -->
+               <div class="modal fade" id="atualizarProduto-{{protuto.id}}" tabindex="-1" role="dialog" aria-labelledby="finalizarVendaModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                     <div class="modal-content">
+                        <div class="modal-header">
+                           <h5 class="modal-title" id="finalizarVendaModalLabel">Atualizar produto</h5>
+                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                           <span aria-hidden="true">&times;</span>
+                           </button>
+                        </div>
+                        <div class="modal-body">
+                           <form action="{% url 'pdvWeb:atualizar_produto' produto.id %}" method="POST">
+                              {% csrf_token %}
+                              <div class="form-group">
+                                 <label for="codigo">Código:</label>
+                                 <input type="number" class="form-control" name="codigo" id="codigo" value="{{produto.codigo}}" placeholder="Digite o código do produto" required>
+                              </div>
+                              <div class="form-group">
+                                 <label for="descricao">Descrição:</label>
+                                 <input type="text" class="form-control" name=descricao id="descricao" value="{{produto.descricao}}" placeholder="Digite o nome do produto" required>
+                              </div>
+                              <div class="form-group">
+                                 <label for="valor">Valor (Unidade):</label>
+                                 <input type="text" class="form-control" name=valor id="valor" value="R${{produto.valor|floatformat:2}}" step=".01" placeholder="Digite o valor do produto" required>
+                              </div>
+                              <div class="form-group">
+                                 <label for="quantidade">Quantidade:</label>
+                                 <input type="number" class="form-control" name=quantidade id="quantidade" value="{{produto.quantidade}}" placeholder="Digite a quantidade do produto" step=".01" required>
+                              </div>
+                              <button type="submit" class="btn btn-primary">Atualizar</button>
+                              <a href="{% url 'pdvWeb:produtos' %}" class="btn btn-primary">Voltar</a>
+                           </form>
+                        </div>
+                     </div>
+                  </div>
+                  {% endfor %}
+            </tbody>
+         </table>
+         </div>
+         </div>
+         <div class="text-left mb-3">
+            <a href="javascript:void(0)" class="btn btn-cadastrar"  data-toggle="modal" data-target="#cadastrarProduto"><i class="bi bi-clipboard2-plus-fill"></i> Cadastrar Produto</a>
+            <a href="{% url 'usuario:gerencia' %}" class="btn btn-cadastrar"><i class="bi bi-arrow-return-left"></i> Voltar</a>
+         </div>
+      </div>
    </body>
+   <!-- Modal de confirmação de cancelamento de venda -->
+   <div class="modal fade" id="cadastrarProduto"  role="dialog" aria-labelledby="finalizarVendaModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="finalizarVendaModalLabel"> Novo Produto</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form action="{% url 'pdvWeb:cadastrar_produto' %}" method="POST">
+               {% csrf_token %}
+               <div class="form-group">
+                  <label for="codigo">Código:</label>
+                  <input type="number" class="form-control" name="codigo" id="codigo" placeholder="Digite o código do produto" required>
+               </div>
+               <div class="form-group">
+                  <label for="descricao">Descrição:</label>
+                  <input type="text" class="form-control" name=descricao id="descricao" placeholder="Digite o nome do produto" required>
+               </div>
+               <div class="form-group">
+                  <label for="valor">Valor (Unidade):</label>
+                  <input type="text" class="form-control" name=valor id="valor" placeholder="Digite o valor do produto" required>
+               </div>
+               <div class="form-group">
+                  <label for="quantidade">Quantidade:</label>
+                  <input type="number" class="form-control" name=quantidade id="quantidade" placeholder="Digite a quantidade do produto" step=".01" required>
+               </div>
+               <button type="submit" class="btn btn-primary">Cadastrar</button>
+               <a href="{% url 'pdvWeb:produtos' %}" class="btn btn-primary">Voltar</a>
+            </form>
+         </div>
+      </div>
+   </div>
    <script>
       var dt = new Date();
       document.getElementById("datetime").innerHTML = '<i class="bi bi-clock-history"></i> ' + dt.toLocaleString();
