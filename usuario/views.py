@@ -42,12 +42,16 @@ def gerencia(request):
 
 
 def funcionarios(request):
-  funcionarios = Funcionario.objects.all()
-  usuario = request.session.get('usuario')
-  request_usuario = Funcionario.objects.get(id = usuario )
-  cargos = Cargo.objects.all()
-  
-  return render(request, 'funcionarios.html', {'cargos':cargos,'funcionarios': funcionarios,'usuario':request_usuario})
+  if request.session.get('usuario'):  
+    funcionarios = Funcionario.objects.all()
+    usuario = request.session.get('usuario')
+    request_usuario = Funcionario.objects.get(id = usuario )
+    cargos = Cargo.objects.all()
+    
+    return render(request, 'funcionarios.html', {'cargos':cargos,'funcionarios': funcionarios,'usuario':request_usuario})
+  else:
+      messages.add_message(request, constants.ERROR, 'Usuario não está logado!')
+      return redirect('usuario:login')
 
 
 #---------------------------------------------------------------------------------------------------
@@ -79,80 +83,88 @@ def validar_login(request):
 
       
 def vendas(request):
-    usuario = request.session.get('usuario')
-    funcionarios = Funcionario.objects.all()
-    request_usuario = Funcionario.objects.get(id = usuario ) 
-    total_venda = NotaFiscal.objects.all()
-    valor_bruto_vendas = NotaFiscal.objects.aggregate(Sum('total'))['total__sum']
-    ticket_medio = valor_bruto_vendas / len(total_venda)
-    ranking_funcionarios = (
-    NotaFiscal.objects.values('funcionario__nome')  # Agrupa por nome do funcionário
-    .annotate(vendas_total=Sum('total'))  # Soma o total de cada grupo
-    .order_by('-vendas_total')  # Ordena em ordem decrescente pelo total de vendas
-    )    
-    
-    top_vendedor = ranking_funcionarios.first()
-    top_vendedor = top_vendedor['funcionario__nome']
-    # Obter a data atual
-    data_atual = timezone.now().date()
+    if request.session.get('usuario'):  
+      usuario = request.session.get('usuario')
+      funcionarios = Funcionario.objects.all()
+      request_usuario = Funcionario.objects.get(id = usuario ) 
+      total_venda = NotaFiscal.objects.all()
+      valor_bruto_vendas = NotaFiscal.objects.aggregate(Sum('total'))['total__sum']
+      ticket_medio = valor_bruto_vendas / len(total_venda)
+      ranking_funcionarios = (
+      NotaFiscal.objects.values('funcionario__nome')  # Agrupa por nome do funcionário
+      .annotate(vendas_total=Sum('total'))  # Soma o total de cada grupo
+      .order_by('-vendas_total')  # Ordena em ordem decrescente pelo total de vendas
+      )    
+      
+      top_vendedor = ranking_funcionarios.first()
+      top_vendedor = top_vendedor['funcionario__nome']
+      # Obter a data atual
+      data_atual = timezone.now().date()
 
-    # Consulta para obter o total de vendas do dia atual
-    vendas_dia = Venda.objects.filter(data__startswith=data_atual.strftime('%d-%m-%Y'), finalizada=True).aggregate(total_vendas=Sum('total'))['total_vendas']
-    historico_venda = Venda.objects.filter(data__startswith=data_atual.strftime('%d-%m-%Y'), finalizada=True)
+      # Consulta para obter o total de vendas do dia atual
+      vendas_dia = Venda.objects.filter(data__startswith=data_atual.strftime('%d-%m-%Y'), finalizada=True).aggregate(total_vendas=Sum('total'))['total_vendas']
+      historico_venda = Venda.objects.filter(data__startswith=data_atual.strftime('%d-%m-%Y'), finalizada=True)
 
-    vendas = []
-    for venda in historico_venda:
-        notas_fiscais = NotaFiscal.objects.filter(venda=venda)
-        for nota_fiscal in notas_fiscais:
-            vendas.append({
-                'total': venda.total,
-                'funcionario': nota_fiscal.funcionario.nome,
-                'data_venda': venda.data
-            })
+      vendas = []
+      for venda in historico_venda:
+          notas_fiscais = NotaFiscal.objects.filter(venda=venda)
+          for nota_fiscal in notas_fiscais:
+              vendas.append({
+                  'total': venda.total,
+                  'funcionario': nota_fiscal.funcionario.nome,
+                  'data_venda': venda.data
+              })
 
-    # Pega todos os produtos com quantidade em estoque abaixo de 100
-    produtos_estoque_baixo = Produto.objects.filter(quantidade__lt=100)
+      # Pega todos os produtos com quantidade em estoque abaixo de 100
+      produtos_estoque_baixo = Produto.objects.filter(quantidade__lt=100)
 
-    # Pega os 5 produtos mais vendidos
-    produtos_mais_vendidos = ItemVenda.objects.values('produto__codigo', 'produto__descricao').annotate(total_vendido=Sum('quantidade')).order_by('-total_vendido')[:5]
+      # Pega os 5 produtos mais vendidos
+      produtos_mais_vendidos = ItemVenda.objects.values('produto__codigo', 'produto__descricao').annotate(total_vendido=Sum('quantidade')).order_by('-total_vendido')[:5]
 
-    numero_funcionarios_logados = Funcionario.objects.filter(esta_logado=True).count()
+      numero_funcionarios_logados = Funcionario.objects.filter(esta_logado=True).count()
 
-    # Pega a quantidade vendida do produto mais vendido
-    print(produtos_mais_vendidos)
-    context ={
-      'usuario':request_usuario,
-      'total_venda':total_venda,
-      'valor_bruto':valor_bruto_vendas,
-      'ticket_medio':ticket_medio,
-      'ranking':ranking_funcionarios,
-      'top_vendedor':top_vendedor,
-      'vendas_dia':vendas_dia,
-      'historico_venda':vendas,
-      'produto_mais_vendido':produtos_mais_vendidos,
-      'estoque_baixo':produtos_estoque_baixo,
-      'funcionarios':funcionarios,
-      'numero_funcionarios_logados':numero_funcionarios_logados
-      }
-    
-    return render(request, 'vendas.html', context)
+      # Pega a quantidade vendida do produto mais vendido
+      print(produtos_mais_vendidos)
+      context ={
+        'usuario':request_usuario,
+        'total_venda':total_venda,
+        'valor_bruto':valor_bruto_vendas,
+        'ticket_medio':ticket_medio,
+        'ranking':ranking_funcionarios,
+        'top_vendedor':top_vendedor,
+        'vendas_dia':vendas_dia,
+        'historico_venda':vendas,
+        'produto_mais_vendido':produtos_mais_vendidos,
+        'estoque_baixo':produtos_estoque_baixo,
+        'funcionarios':funcionarios,
+        'numero_funcionarios_logados':numero_funcionarios_logados
+        }
+      
+      return render(request, 'vendas.html', context)
+    else:
+      messages.add_message(request, constants.ERROR, 'Usuario não está logado!')
+      return redirect('usuario:login')
 
 
 def cadastrar_funcionario(request):
-  v_nome = request.POST.get('nome')
-  v_cpf = request.POST.get('cpf')
-  v_cargo = request.POST.get('cargo')
-  cargo = Cargo.objects.get(id = v_cargo)
-  
-  funcionario = Funcionario.objects.filter(cpf=v_cpf)
-  if funcionario.exists():
-     messages.error(request,  'ERROR! CPF já está cadastrado!')
-     return redirect('usuario:funcionarios')
-  
-  Funcionario.objects.create(nome = v_nome, cpf = v_cpf, cargo = cargo)
-  
-  messages.success(request,  'Funcionario cadastrado com sucesso!')
-  return redirect('usuario:funcionarios')
+  if request.session.get('usuario'):  
+    v_nome = request.POST.get('nome')
+    v_cpf = request.POST.get('cpf')
+    v_cargo = request.POST.get('cargo')
+    cargo = Cargo.objects.get(id = v_cargo)
+    
+    funcionario = Funcionario.objects.filter(cpf=v_cpf)
+    if funcionario.exists():
+      messages.error(request,  'ERROR! CPF já está cadastrado!')
+      return redirect('usuario:funcionarios')
+    
+    Funcionario.objects.create(nome = v_nome, cpf = v_cpf, cargo = cargo)
+    
+    messages.success(request,  'Funcionario cadastrado com sucesso!')
+    return redirect('usuario:funcionarios')
+  else:
+      messages.add_message(request, constants.ERROR, 'Usuario não está logado!')
+      return redirect('usuario:login')
   
   
 def atualizar_funcionario(request, id):

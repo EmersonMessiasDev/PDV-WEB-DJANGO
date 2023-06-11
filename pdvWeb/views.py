@@ -41,19 +41,23 @@ def todos_produtos(request):
 # todo                                      Funções de admin
 #---------------------------------------------------------------------------------------------------
 def cadastrar_produto(request):
-  v_codigo = int(request.POST.get('codigo'))
-  v_descricao = request.POST.get('descricao')
-  v_valor = float(request.POST.get('valor'))
-  v_quantidade = int(request.POST.get('quantidade'))
-  
-  produto = Produto.objects.filter(codigo = v_codigo)
-  if produto.exists():
-    messages.error(request, 'ERROR! Código do produto já existe!')
+  if request.session.get('usuario'):  
+    v_codigo = int(request.POST.get('codigo'))
+    v_descricao = request.POST.get('descricao')
+    v_valor = float(request.POST.get('valor'))
+    v_quantidade = int(request.POST.get('quantidade'))
+    
+    produto = Produto.objects.filter(codigo = v_codigo)
+    if produto.exists():
+      messages.error(request, 'ERROR! Código do produto já existe!')
+      return redirect('pdvWeb:produtos')
+    
+    Produto.objects.create(codigo = v_codigo, descricao = v_descricao, valor = v_valor, quantidade = v_quantidade)
+    messages.success(request, 'Produto cadastrado com sucesso!')
     return redirect('pdvWeb:produtos')
-  
-  Produto.objects.create(codigo = v_codigo, descricao = v_descricao, valor = v_valor, quantidade = v_quantidade)
-  messages.success(request, 'Produto cadastrado com sucesso!')
-  return redirect('pdvWeb:produtos')
+  else:
+      messages.add_message(request, constants.ERROR, 'Usuario não está logado!')
+      return redirect('usuario:login')
 
 
 def atualizar_produto(request, id):
