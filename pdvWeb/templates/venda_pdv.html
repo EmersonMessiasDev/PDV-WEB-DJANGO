@@ -133,6 +133,7 @@
          </div>
       </div>
    </body>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
    <script>
       $(document).ready(function(){
          $('#valorRecebido').on('input', function() {
@@ -253,4 +254,10 @@
       {% endfor %}
    </script>
    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+   <script>
+      $(window).on('unload', function(){
+          navigator.sendBeacon("{% url 'usuario:sair' %}", {});
+      });
+  </script>
+  
 </html>

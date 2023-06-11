@@ -23,6 +23,13 @@ def login(request):
 
 
 def sair(request):
+    usuario_id = request.session.get('usuario')
+    if usuario_id is not None:
+        funcionario = Funcionario.objects.get(id=usuario_id)
+        funcionario.esta_logado = False
+        funcionario.save()
+  
+  
     messages.success(request,  'Você saiu do portal!')
     request.session.flush()
     return redirect('usuario:login')
@@ -49,11 +56,7 @@ def funcionarios(request):
 
 def validar_login(request):
     nome = request.POST.get('nome')
-    cpf = request.POST.get('cpf')
-    
-    print(nome)
-    print(cpf)
-    
+    cpf = request.POST.get('cpf')  
     
     try:
         funcionario = Funcionario.objects.get(nome=nome, cpf=cpf)
@@ -61,11 +64,15 @@ def validar_login(request):
         messages.add_message(request, constants.ERROR, 'Nome ou CPF inválidos!')
         return redirect('usuario:login')
 
+    funcionario.esta_logado = True
+    funcionario.save()
+    
     if funcionario.cargo.nome == 'Gerente':  
       messages.add_message(request, constants.SUCCESS, 'Gerente logado com sucesso!')
       request.session['usuario'] = funcionario.id
       return redirect('usuario:gerencia')
     else: 
+      
       messages.add_message(request, constants.SUCCESS, 'Funcionario logado com sucesso!')
       request.session['usuario'] = funcionario.id
       return redirect('pdvWeb:home')
@@ -73,6 +80,7 @@ def validar_login(request):
       
 def vendas(request):
     usuario = request.session.get('usuario')
+    funcionarios = Funcionario.objects.all()
     request_usuario = Funcionario.objects.get(id = usuario ) 
     total_venda = NotaFiscal.objects.all()
     valor_bruto_vendas = NotaFiscal.objects.aggregate(Sum('total'))['total__sum']
@@ -108,7 +116,7 @@ def vendas(request):
     # Pega os 5 produtos mais vendidos
     produtos_mais_vendidos = ItemVenda.objects.values('produto__codigo', 'produto__descricao').annotate(total_vendido=Sum('quantidade')).order_by('-total_vendido')[:5]
 
-    # Recupera os produtos usando os ids obtidos da consulta acima
+    numero_funcionarios_logados = Funcionario.objects.filter(esta_logado=True).count()
 
     # Pega a quantidade vendida do produto mais vendido
     print(produtos_mais_vendidos)
@@ -123,6 +131,8 @@ def vendas(request):
       'historico_venda':vendas,
       'produto_mais_vendido':produtos_mais_vendidos,
       'estoque_baixo':produtos_estoque_baixo,
+      'funcionarios':funcionarios,
+      'numero_funcionarios_logados':numero_funcionarios_logados
       }
     
     return render(request, 'vendas.html', context)

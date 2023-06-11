@@ -109,6 +109,16 @@ label {
   animation: blinker 1.5s linear infinite;
 }
 
+.status-dotoff {
+  height: 15px;
+  width: 15px;
+  background-color: #ff0000;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+
+
 @keyframes blinker {
 50% { opacity: 0; }
 }
