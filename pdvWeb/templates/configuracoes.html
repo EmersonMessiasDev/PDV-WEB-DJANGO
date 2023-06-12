@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+   <head>
+      <title>PDV Web</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      <link rel="stylesheet" href="{% static 'pdv/css/style.css' %}">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+   </head>
+   <body>
+      <div class="container-fluid">
+      <div class="row">
+      <div class="col-2 sidebar">
+         <h3><a href="{% url 'pdvWeb:home' %}" class="logo"><img src="{% static 'pdv/img/logoVenda.png' %}" alt="DefPdv" style="width:250px; margin-top: -6rem;"></a></h3>
+         {% if usuario %}
+         <div class="usuario-info">
+            <p id="datetime" class="card-text"></p>
+            <!-- Novo parágrafo para a data e hora -->
+            <p><i class="bi bi-person-circle"></i> {{usuario.nome}}</p>
+            <p><i class="bi bi-upc-scan"></i> {{usuario.cpf}}</p>
+            <p><i class="bi bi-bag"></i> {{usuario.cargo.nome}}</p>
+         </div>
+         <div class="action-usuario">
+            {% if usuario.cargo.nome == 'Gerente'  %}
+            <a href="{% url 'usuario:gerencia' %}" class="nav-link">Administração</a>
+            {% endif %}
+            <a href="{% url 'usuario:sair' %}" class="nav-link">Logout</a>
+         </div>
+         {% else %}
+         <a href="{% url 'usuario:login' %}" class="nav-link">Login</a>
+         {% endif %}
+      </div>
+      <div class="col main">
+         <div class="col main">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <form method="POST" action="{% url 'pdvWeb:personalizar' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="nomePdv">Nome do PDV</label>
+                            <input type="text" class="form-control" id="nomePdv" name="nomePdv">
+                        </div>
+                        <div class="form-group">
+                            <label for="imagemPdv">Imagem do PDV</label>
+                            <input type="file" class="form-control-file" id="imagemPdv" name="imagemPdv">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Personalizar</button>
+                    </form>
+                </div>
+            </div>
+        
+            <div class="container">
+                <div class="row justify-content-center">
+                  <div class="col-md-12">
+                    <div class="card shadow-lg mb-4"> <!-- adicionado a classe shadow-lg para sombra destacada -->
+                      <div class="card-header">
+                        Pre-visualização <!-- título do cartão -->
+                      </div>
+                      <div class="card-body text-center p-2"> <!-- padding diminuído para p-2 -->
+                        <img id="pdvImgPreview"  src="{% static 'pdv/img/defPDVLogo.png' %}" alt="Some description" class="img-fluid mb-1"  style="width: 30%;"> <!-- imagem em cima, margem de baixo diminuída -->
+                        <h1><strong>CAIXA LIVRE</strong></h1>
+                        <a href="" data-toggle="modal" data-target="#cpfCliente" class="btn btn-success my-1"><i class="bi bi-cart-plus-fill"></i> Iniciar Venda</a> <!-- margem ajustada para y-1 -->
+                        {% if venda_aberta %}
+                          <a type="button" class="btn btn-info my-1" data-toggle="modal" data-target="#vendaAberta"><i class="bi bi-list-check"></i> Vendas em aberto</a> <!-- margem ajustada para y-1 -->
+                        {% else %}
+                          <a type="button" class="btn btn-info my-1 disabled" data-toggle="modal" data-target="#vendaAberta"><i class="bi bi-list-check"></i> Vendas em aberto</a> <!-- margem ajustada para y-1 -->
+                        {% endif %}
+                      </div>
+                      <div class="card-footer text-center p-2"> <!-- padding diminuído para p-2 -->
+                        <div class="card p-2"> <!-- padding diminuído para p-2 -->
+                          <div class="card-body text-center">
+                            <h5 class="card-title"  id="pdvNomePreview">Mercadinho LA ELE!</h5>
+                            <p id="datetime" class="card-text"></p>
+                            <p class="card-text"><span class="status-dot"></span> Online </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              
+              
+        </div>        
+      </div>
+   </body>
+   <script>
+      var dt = new Date();
+      document.getElementById("datetime").innerHTML = '<i class="bi bi-clock-history"></i> ' + dt.toLocaleString();
+      
+      setInterval(function() {
+          dt = new Date();
+          document.getElementById("datetime").innerHTML = '<i class="bi bi-clock-history"></i> ' + dt.toLocaleString();
+      }, 1000);
+   </script>
+   <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+   <script>
+      $(window).on('unload', function(){
+          navigator.sendBeacon("{% url 'usuario:sair' %}", {});
+      });
+  </script>
+  <script>
+    document.getElementById('imagemPdv').onchange = function (e) {
+        var img = document.getElementById('pdvImgPreview');
+        img.src = URL.createObjectURL(e.target.files[0]);
+        img.style.display = 'block';
+        img.style.margin = 'auto'; // centraliza a imagem horizontalmente
+    };
+    
+    document.getElementById('nomePdv').oninput = function (e) {
+        document.getElementById('pdvNomePreview').textContent = e.target.value;
+    };
+    </script>
+    
+</html>

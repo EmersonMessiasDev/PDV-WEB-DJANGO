@@ -17,6 +17,7 @@ urlpatterns = [
     path('buscar_produto/', buscar_produto, name='buscar_produto'),
     path('finalizar_venda/<int:id>', finalizar_venda, name='finalizar_venda'),
     path('retornar_venda/<int:id>', retornar_venda, name='retornar_venda'),
-    path('cancelar_venda/<int:id>', cancelar_venda, name='cancelar_venda')
+    path('cancelar_venda/<int:id>', cancelar_venda, name='cancelar_venda'),
+    path('personalizar/', personalizar, name='personalizar')
     
 ]

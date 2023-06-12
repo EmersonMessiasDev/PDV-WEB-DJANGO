@@ -37,14 +37,17 @@
          <a href="{% url 'usuario:login' %}" class="nav-link">Login</a>
          {% endif %}
       </div>
-      <div class="col main">
+      <div class="col main" style="height: 100%;   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),  background-size: cover;">
          <div class="add-product text-center">
-            <img src="{% static 'pdv/img/admindefPDV.png' %}" alt="Some description" style="max-width: 100%;"><br>
+            <img src="{% static 'pdv/img/defPDVLogo.png' %}" alt="Some description" style="width:550px;"><br>
+            <br><br>
+            <h1><strong>ADMININSTRAÇÃO</strong></h1>
+
             <!-- <a href="{% url 'pdvWeb:nova_venda' %}" class="btn btn-primary mt-4">Iniciar Venda</a> -->
          </div>
          <br><br>
          <div class="row mt-4 d-flex justify-content-center align-items-center">
-            <div class="col-md-4">
+            <div class="col-md-3">
                <div class="card">
                   <div class="card-body text-center">
                      <a href="{% url 'usuario:funcionarios' %}">
@@ -54,7 +57,7 @@
                   </div>
                </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                <div class="card">
                   <div class="card-body text-center">
                      <a href="{% url 'pdvWeb:produtos' %}">
@@ -64,12 +67,22 @@
                   </div>
                </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                <div class="card">
                   <div class="card-body text-center">
                      <a href="{% url 'usuario:vendas' %}">
                         <i class="fas fa-chart-line fa-3x"></i>
                         <h5 class="card-title mt-2">Vendas</h5>
+                     </a>
+                  </div>
+               </div>
+            </div>
+            <div class="col-md-3">
+               <div class="card">
+                  <div class="card-body text-center">
+                     <a href="{% url 'pdvWeb:personalizar' %}">
+                        <i class="fa fa-cog fa-3x"></i>
+                        <h5 class="card-title mt-2">Configurações da loja</h5>
                      </a>
                   </div>
                </div>

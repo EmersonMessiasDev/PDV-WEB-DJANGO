@@ -40,7 +40,7 @@
       <div class="container my-5">
       <h1 class="text-center mb-4 title"><i class="bi bi-basket-fill"></i> Lista de Produtos</h1>
       <div class="table-responsive">
-        <div class="product-list " style="max-height:500px; overflow:auto;">
+        <div class="product-list " style="max-height:450px; overflow:auto;">
          <table class="table table-striped table-hover">
             <thead>
                <tr>
@@ -113,6 +113,14 @@
             <a href="javascript:void(0)" class="btn btn-cadastrar"  data-toggle="modal" data-target="#cadastrarProduto"><i class="bi bi-clipboard2-plus-fill"></i> Cadastrar Produto</a>
             <a href="{% url 'usuario:gerencia' %}" class="btn btn-cadastrar"><i class="bi bi-arrow-return-left"></i> Voltar</a>
          </div>
+         <div class="text-center">
+            <h5 class="text-center">Legenda do Estoque</h5>
+            <span class="badge bg-danger text-white">Vermelho: Estoque baixo (0 - 100)</span>
+            <span class="badge bg-warning text-dark">Amarelo: Alerta (101 - 150)</span>
+            <span class="badge bg-success text-white">Verde: Acima de 150</span><br>
+            <span class="text-center">Os valores podem ser ajustados para melhor controle!</span>
+         </div>
+         
       </div>
    </body>
    <!-- Modal de confirmação de cancelamento de venda -->

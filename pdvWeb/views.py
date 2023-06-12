@@ -11,8 +11,6 @@ from .utils import *
 #---------------------------------------------------------------------------------------------------
 # todo                                      Renderização de paginas
 #---------------------------------------------------------------------------------------------------
-
-
 def home(request):
     try:
       venda_aberta = Venda.objects.filter(finalizada=False)
@@ -92,6 +90,14 @@ def deletar_produto(request, id):
   return redirect('pdvWeb:produtos') 
 
 
+def personalizar(request):
+    if request.session.get('usuario'): 
+      usuario = request.session.get('usuario')
+      request_usuario = Funcionario.objects.get(id = usuario )
+      return render(request, 'configuracoes.html',{'usuario':request_usuario})
+    else:
+      messages.add_message(request, constants.ERROR, 'Usuario não está logado!')
+      return redirect('usuario:login')
 #---------------------------------------------------------------------------------------------------
 # todo                                      Funções de venda
 #---------------------------------------------------------------------------------------------------
@@ -122,15 +128,11 @@ def retornar_venda(request, id):
 
 
 def adicionar_produto(request, venda_id):
-    print(timezone.now())
-
     usuario = request.session.get('usuario')
     request_usuario = Funcionario.objects.get(id = usuario ) 
     todos_produtos = Produto.objects.all()
     
     venda_aberta = Venda.objects.filter(finalizada=False)
-    print(venda_aberta)
-
     
     if request.method == 'POST':
         codigo_produto = request.POST['codigo_produto']
@@ -203,9 +205,21 @@ def deletar_item_venda(request, id):
 
 
 def cancelar_venda(request, id):
+  if request.method == 'POST':
+        cpf = request.POST.get('cpf')
+        
+        usuario = Funcionario.objects.filter(cpf = cpf).filter(cargo = 2)
+        
+        venda = Venda.objects.get(id = id)
+        
+        if len(usuario) == 0:
+          messages.add_message(request, constants.ERROR, 'Matricula invalida!')
+          return redirect('pdvWeb:adicionar_produto' , venda.id)
+  
   venda = Venda.objects.get(id = id)
   
   venda.delete()
+  
   messages.add_message(request, constants.SUCCESS, 'Venda cancelada!')
   return redirect('pdvWeb:home') 
 

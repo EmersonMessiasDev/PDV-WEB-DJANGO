@@ -6,6 +6,13 @@ import pytz
 
 fuso = pytz.timezone('America/Sao_Paulo')
 
+class CustomStore(models.Model):
+    nome = models.CharField(max_length=100, null=True, blank=True)
+    logoImage = models.ImageField(upload_to='images/', blank=True, null=True)
+    
+    def __str__(self) -> str:
+       return self.nome
+
 class Produto(models.Model):
   codigo = models.IntegerField(null=False, blank=False)
   descricao = models.CharField(max_length=50, null=False, blank=False)
@@ -15,6 +22,7 @@ class Produto(models.Model):
   def __str__(self) -> str:
     return f'Produto: {self.codigo} - {self.descricao}'
   
+
 class Venda(models.Model):
     produtos = models.ManyToManyField(Produto, through='ItemVenda')
     total = models.FloatField(null=False, blank=False)

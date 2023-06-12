@@ -249,10 +249,15 @@
    <script>
       alertify.set('notifier','position', 'top-right');
       {% for message in messages %}
-          var msg = alertify.notify('{{message}}');
-          msg.delay(6)
+          {% if message.tags == 'success' %}
+              alertify.success('{{message}}');
+          {% elif message.tags == 'error' %}
+              alertify.error('{{message}}');
+          {% else %}
+              alertify.notify('{{message}}');
+          {% endif %}
       {% endfor %}
-   </script>
+  </script>
    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
    <script>
       $(window).on('unload', function(){
